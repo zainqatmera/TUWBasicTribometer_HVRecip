@@ -47,7 +47,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                     case MessageCode.SetDatumPosition:
                         {
                             TribometerAxis axis = (TribometerAxis)e[1];
-                            long position = BitConverter.ToInt64(e, 2);
+                            long position = BitConverter.ToInt32(e, 2);
                             IncomingMessages.Add($"{axis} datum set to {position}");
                         }
                         break;
@@ -73,8 +73,9 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
 
         public void Dispose()
         {
-            if (serialPortManager != null) { 
-                serialPortManager.TextReceived -= SerialPortManager_TextReceived; 
+            if (serialPortManager != null)
+            {
+                serialPortManager.TextReceived -= SerialPortManager_TextReceived;
                 serialPortManager.MessageReceived -= SerialPortManager_MessageReceived;
             }
         }
@@ -92,7 +93,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public byte MessageId
         {
             get => _messageId;
-            set => SetProperty(ref _messageId, value);   
+            set => SetProperty(ref _messageId, value);
         }
 
         private string _messageData;
@@ -149,13 +150,13 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 byte[] buffer = new byte[9];
                 MemoryStream ms = new MemoryStream(buffer);
                 ms.WriteByte(axisByte);
-                ms.Write(BitConverter.GetBytes(targetPosition),0, 8);
+                ms.Write(BitConverter.GetBytes(targetPosition), 0, 8);
                 serialPortManager.SendCommand((byte)MessageCode.Move, buffer);
             }
             catch { }
         }
 
-            private void SendHandshake()
+        private void SendHandshake()
         {
             serialPortManager.StartMessaging();
         }
