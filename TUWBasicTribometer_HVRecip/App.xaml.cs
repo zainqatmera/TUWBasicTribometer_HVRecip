@@ -26,18 +26,27 @@ namespace TUWBasicTribometer_HVRecip
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
             ViewModelLocationProvider.Register<SerialMonitorWindow, SerialMonitorWindowViewModel>();
 
-            containerRegistry.RegisterSingleton<SerialPortManager>();
+            containerRegistry.RegisterForNavigation<SetupView, SetupViewModel>(PrismNavigationUri.Setup);
+            containerRegistry.RegisterForNavigation<InfoLogView, InfoLogViewModel>(PrismNavigationUri.Log);
+
+
+          //  containerRegistry.RegisterSingleton<SerialPortManager>();
+            containerRegistry.RegisterSingleton<TribometerController>();
 
         }
 
         protected override Window CreateShell()
         {
-            return Container.Resolve<SerialMonitorWindow>();
+            //return Container.Resolve<SerialMonitorWindow>();
+            return Container.Resolve<MainWindow>();
         }
 
         protected override void OnInitialized()
         {
             var regionManager = Container.Resolve<IRegionManager>();
+            regionManager.RequestNavigate(PrismRegion.MainContentRegion, PrismNavigationUri.Setup);
+            regionManager.RequestNavigate(PrismRegion.LogContentRegion, PrismNavigationUri.Log);
+
             /*            regionManager.RequestNavigate(RegionName.StatusTowerRegion,
                             NavigationUri.StatusTowerView);
 
@@ -51,9 +60,9 @@ namespace TUWBasicTribometer_HVRecip
                         var dialogService = Container.Resolve<IDialogService>();
                         dialogService.Show(NavigationUri.DialogRunningLog);*/
 
-            var spm = Container.Resolve<SerialPortManager>();
+/*            var spm = Container.Resolve<SerialPortManager>();
             spm.Connect(TribometerSettings.Instance.ComPortTribometer, TribometerSettings.Instance.ComPortTribometerBaudRate);
-
+*/
             base.OnInitialized();
         }
 

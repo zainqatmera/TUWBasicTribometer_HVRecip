@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TUWBasicTribometer_HVRecip
+namespace TUWBasicTribometer_HVRecip.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SetupView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SetupView : UserControl
     {
-        public MainWindow()
+        public SetupView()
         {
             InitializeComponent();
         }

@@ -91,11 +91,18 @@
     <Compile Include="Controllers\SerialPortManager.cs" />
     <Compile Include="Controllers\TribometerController.cs" />
     <Compile Include="Controllers\TribometerSettings.cs" />
+    <Compile Include="PrismConstants.cs" />
     <Compile Include="ViewModels\HorizontalRecipViewModel.cs" />
+    <Compile Include="ViewModels\InfoLogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SerialMonitorWindowViewModel.cs" />
+    <Compile Include="ViewModels\SetupViewModel.cs" />
+    <Compile Include="ViewModels\StatusViewModel.cs" />
     <Compile Include="Views\HorizontalRecipView.xaml.cs">
       <DependentUpon>HorizontalRecipView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InfoLogView.xaml.cs">
+      <DependentUpon>InfoLogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LabelValueControl.xaml.cs">
       <DependentUpon>LabelValueControl.xaml</DependentUpon>
@@ -106,22 +113,21 @@
     <Compile Include="Views\SerialMonitorWindow.xaml.cs">
       <DependentUpon>SerialMonitorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SetupView.xaml.cs">
+      <DependentUpon>SetupView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StatusView.xaml.cs">
       <DependentUpon>StatusView.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="Views\HorizontalRecipView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InfoLogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SerialMonitorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

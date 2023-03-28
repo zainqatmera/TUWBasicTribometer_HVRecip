@@ -11,6 +11,11 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         private SerialPortManager serialPortManager;
         private TribometerState _state;
 
+        public TribometerController()
+        {
+
+        }
+
         public TribometerState State { 
             get => _state; 
             set { 
@@ -25,7 +30,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         // Events 
 
         public event EventHandler<TribometerState> StateChanged;
-        public event EventHandler<string> TextReceived;        
+        public event EventHandler<string> InfoLogIssued;        
 
         // Methods - General connection and messaging
 
@@ -57,7 +62,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         public void HomeTribometer()
         {
-
+            SendCommand(MessageCode.Home);
         }
 
 
@@ -73,12 +78,17 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         private void SerialPortManager_TextReceived(object sender, string e)
         {
-            TextReceived?.Invoke(this, e);
+            InfoLogIssued?.Invoke(this, e);
         }
 
         private void SerialPortManager_MessageReceived(object sender, byte[] e)
         {
-            throw new NotImplementedException();
+            MessageCode messageId = (MessageCode)e[0];
+            string data = "";
+            if (e.Length > 1) {
+                data = Encoding.UTF8.GetString(new ReadOnlySpan<byte>(e,1, e.Length - 1).ToArray());
+            }
+            InfoLogIssued?.Invoke(this, $"{messageId} {data}");
         }
 
 

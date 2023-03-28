@@ -3,7 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"
+        xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"   
+        xmlns:vms="clr-namespace:TUWBasicTribometer_HVRecip.ViewModels"
+        xmlns:prism="http://prismlibrary.com/"
+        d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel}"
         mc:Ignorable="d"
              Title="TUW Basic Tribometer - Horizontal/Vertical Reciprocating Controller" Height="450" Width="800">
     <Grid>
@@ -16,18 +19,19 @@
             <ColumnDefinition Width="179*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Status Control -->
-        <ContentControl Grid.Column="1" Grid.RowSpan="2" />
+        <!-- Log Control -->
+        <ContentControl Grid.Column="1" Grid.RowSpan="2" prism:RegionManager.RegionName="LogContentRegion" />
 
         <!-- Menu Area -->
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <Button Content="Setup" Command="{Binding MainNavigation}" CommandParameter="Setup"/>
             <Button Content="Manual Move" />
             <Button Content="Horizontal Reciprocating" />
             <Button Content="Vertical Reciprocating" />
         </StackPanel>
 
         <!-- Main Content -->
-        <ContentControl Grid.Column="0" Grid.Row="1" />
+        <ContentControl Grid.Column="0" Grid.Row="1" prism:RegionManager.RegionName="MainContentRegion" />
 
     </Grid>
 </Window>
