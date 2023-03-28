@@ -1,0 +1,50 @@
+﻿<Window x:Class="TUWBasicTribometer_HVRecip.Views.SerialMonitorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"
+        mc:Ignorable="d"
+        Title="SerialMonitorWindow" Height="450" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ListBox Margin="2" ItemsSource="{Binding IncomingMessages}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <DockPanel Grid.Row="1" LastChildFill="True" Margin="4">
+            <TextBlock Text="Command Id" Width="100" DockPanel.Dock="Left"/>
+            <TextBox Text="{Binding MessageId}" />
+        </DockPanel>
+        
+        <DockPanel Grid.Row="2" LastChildFill="True" Margin="4">
+            <TextBlock Text="ASCII Data" Width="100" DockPanel.Dock="Left"/>
+            <TextBox Text="{Binding MessageData}" />
+        </DockPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button Content="Send" Command="{Binding SendMessageCommand}" Margin="4" HorizontalAlignment="Center" Width="100"/>
+            <Button Content="Handshake" Command="{Binding SendHandshakeCommand}" Margin="4" HorizontalAlignment="Center" Width="100"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Vertical">
+            <TextBox Text="{Binding DataEntry1}" Margin="4" />
+            <CheckBox Content="Horizontal" IsChecked="{Binding HorizontalAxisCheck}" Margin="4" HorizontalAlignment="Center"/>
+            <Button Content="Move" Command="{Binding MoveCommand}" Margin="4" HorizontalAlignment="Center" Width="100"/>
+        </StackPanel>
+
+
+    </Grid>
+</Window>

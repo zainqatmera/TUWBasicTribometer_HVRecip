@@ -1,0 +1,33 @@
+﻿<Window x:Class="TUWBasicTribometer_HVRecip.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"
+        mc:Ignorable="d"
+             Title="TUW Basic Tribometer - Horizontal/Vertical Reciprocating Controller" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22*"/>
+            <RowDefinition Height="195*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="621*"/>
+            <ColumnDefinition Width="179*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Status Control -->
+        <ContentControl Grid.Column="1" Grid.RowSpan="2" />
+
+        <!-- Menu Area -->
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <Button Content="Manual Move" />
+            <Button Content="Horizontal Reciprocating" />
+            <Button Content="Vertical Reciprocating" />
+        </StackPanel>
+
+        <!-- Main Content -->
+        <ContentControl Grid.Column="0" Grid.Row="1" />
+
+    </Grid>
+</Window>
