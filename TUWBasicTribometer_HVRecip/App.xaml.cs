@@ -28,6 +28,7 @@ namespace TUWBasicTribometer_HVRecip
 
             containerRegistry.RegisterForNavigation<SetupView, SetupViewModel>(PrismNavigationUri.Setup);
             containerRegistry.RegisterForNavigation<InfoLogView, InfoLogViewModel>(PrismNavigationUri.Log);
+            containerRegistry.RegisterForNavigation<ManualView, ManualViewModel>(PrismNavigationUri.Manual);
 
 
           //  containerRegistry.RegisterSingleton<SerialPortManager>();

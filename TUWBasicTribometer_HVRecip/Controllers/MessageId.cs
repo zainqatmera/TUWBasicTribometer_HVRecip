@@ -10,10 +10,13 @@ namespace TUWBasicTribometer_HVRecip.Controllers
     {
         StopMotion = 0,
         Home = 1,
-        Move = 2,
+        MoveRel = 2,    // Data[0] = Axis, Data[1...5] move steps
+        MoveTo = 3,     // Data[0] = Axis, Data[1...5] move to position
 
         // Incoming
         SetDatumPosition = 128,   // The position of the homed limit switch Data[0] = AXIS; Data[1..8] = long position
+        
+        StatusPosition = 140,   // Data[0..3] = Horizontal position, Data[4..7] = Vertical position
 
         TextLog = 200,
 

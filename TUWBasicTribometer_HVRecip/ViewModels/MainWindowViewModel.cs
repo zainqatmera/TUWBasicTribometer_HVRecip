@@ -28,8 +28,10 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             switch (obj)
             {
                 case "Setup":
-                    regionManager.RequestNavigate(PrismRegion.LogContentRegion, PrismNavigationUri.Log); 
                     regionManager.RequestNavigate(PrismRegion.MainContentRegion, PrismNavigationUri.Setup); 
+                    break;
+                case "Manual":
+                    regionManager.RequestNavigate(PrismRegion.MainContentRegion, PrismNavigationUri.Manual);
                     break;
             }
 

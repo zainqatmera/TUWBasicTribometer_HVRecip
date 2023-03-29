@@ -16,6 +16,7 @@ namespace TUWBasicTribometer_HVRecip
     {
         public const string Setup = nameof(Setup);
         public const string Log = nameof(Log);    
+        public const string Manual = nameof(Manual);
     }
 
 }

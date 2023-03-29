@@ -30,5 +30,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         public string ComPortTribometer = "COM4";
         public int ComPortTribometerBaudRate = 115200;
+
+        public int stepsOffsetToHCentre = 1000;  // Steps from limit switch datum to "centre"
     }
 }

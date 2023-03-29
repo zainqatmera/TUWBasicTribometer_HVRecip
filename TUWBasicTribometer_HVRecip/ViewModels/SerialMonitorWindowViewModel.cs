@@ -151,7 +151,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 MemoryStream ms = new MemoryStream(buffer);
                 ms.WriteByte(axisByte);
                 ms.Write(BitConverter.GetBytes(targetPosition), 0, 8);
-                serialPortManager.SendCommand((byte)MessageCode.Move, buffer);
+                serialPortManager.SendCommand((byte)MessageCode.MoveTo, buffer);
             }
             catch { }
         }

@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="TUWBasicTribometer_HVRecip.Views.ManualView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"
+             mc:Ignorable="d" 
+             xmlns:vms="clr-namespace:TUWBasicTribometer_HVRecip.ViewModels"
+             xmlns:prism="http://prismlibrary.com/"
+             d:DataContext="{d:DesignInstance Type=vms:ManualViewModel}"
+
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="^^" Command="{Binding MoveCommand}" CommandParameter="U2"/>
+            <Button Content="^" Command="{Binding MoveCommand}" CommandParameter="U1"/>
+            <Rectangle Height="20" />
+            <Button Content="v" Command="{Binding MoveCommand}" CommandParameter="D1"/>
+            <Button Content="vv" Command="{Binding MoveCommand}" CommandParameter="D2"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Margin="10, 0">
+            <Button Content="&lt;&lt;" Width="50" Command="{Binding MoveCommand}" CommandParameter="L2"/>
+            <Button Content="&lt;" Width="50" Command="{Binding MoveCommand}" CommandParameter="L1"/>
+            <Rectangle Width="25" />
+            <Button Content="Centre" Width="50" Command="{Binding MoveToCommand}" CommandParameter="HC"/>
+            <Rectangle Width="25" />
+            <Button Content="&gt;" Width="50" Command="{Binding MoveCommand}" CommandParameter="R1"/>
+            <Button Content="&gt;&gt;" Width="50" Command="{Binding MoveCommand}" CommandParameter="R2"/>
+        </StackPanel>
+
+        <Grid Grid.Column="0" Grid.Row="2" >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Content="Horizontal Goto: " VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="1" Content="Vertical Goto: "   VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SetGotoHorizontal}" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SetGotoVertical}" VerticalAlignment="Center"/>
+
+            <Button Grid.Column="2" Width="50" Margin="8" Grid.Row="0" Content="Go" Command="{Binding MoveToCommand}" CommandParameter="H" VerticalAlignment="Center"/>
+            <Button Grid.Column="2" Width="50" Margin="8" Grid.Row="1" Content="Go" Command="{Binding MoveToCommand}" CommandParameter="V" VerticalAlignment="Center"/>
+        
+        </Grid>
+
+    </Grid>
+</UserControl>

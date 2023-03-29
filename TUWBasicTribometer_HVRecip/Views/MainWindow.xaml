@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="621*"/>
-            <ColumnDefinition Width="179*"/>
+            <ColumnDefinition Width="250*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Log Control -->
@@ -24,10 +24,10 @@
 
         <!-- Menu Area -->
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Setup" Command="{Binding MainNavigation}" CommandParameter="Setup"/>
-            <Button Content="Manual Move" />
-            <Button Content="Horizontal Reciprocating" />
-            <Button Content="Vertical Reciprocating" />
+            <Button Margin="4" Padding="8,0" Content="Setup" Command="{Binding MainNavigationCommand}" CommandParameter="Setup"/>
+            <Button Margin="4" Padding="8,0" Content="Manual" Command="{Binding MainNavigationCommand}" CommandParameter="Manual"/>
+            <Button Margin="4" Padding="8,0" Content="Horizontal Reciprocating" Command="{Binding MainNavigationCommand}" CommandParameter="Horizontal"/>
+            <Button Margin="4" Padding="8,0" Content="Vertical Reciprocating" Command="{Binding MainNavigationCommand}" CommandParameter="Vertical"/>
         </StackPanel>
 
         <!-- Main Content -->

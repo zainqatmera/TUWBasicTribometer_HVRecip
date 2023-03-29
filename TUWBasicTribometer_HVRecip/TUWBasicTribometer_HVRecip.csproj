@@ -95,6 +95,7 @@
     <Compile Include="ViewModels\HorizontalRecipViewModel.cs" />
     <Compile Include="ViewModels\InfoLogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\ManualViewModel.cs" />
     <Compile Include="ViewModels\SerialMonitorWindowViewModel.cs" />
     <Compile Include="ViewModels\SetupViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManualView.xaml.cs">
+      <DependentUpon>ManualView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SerialMonitorWindow.xaml.cs">
       <DependentUpon>SerialMonitorWindow.xaml</DependentUpon>
@@ -136,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManualView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
