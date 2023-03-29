@@ -19,6 +19,7 @@
             <RowDefinition Height="120"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         
@@ -62,5 +63,30 @@
         
         </Grid>
 
+        <Grid Grid.Row="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto   " />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="H small step" />
+            <Label Grid.Row="1" Content="H large step" />
+            <Label Grid.Row="2" Content="V small step" />
+            <Label Grid.Row="3" Content="V large step" />
+
+            <TextBox Grid.Row="0" Grid.Column="1" Width="75" Text="{Binding StepsPerMoveHLow}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Width="75" Text="{Binding StepsPerMoveHHigh}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Width="75" Text="{Binding StepsPerMoveVLow}"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Width="75" Text="{Binding StepsPerMoveVHigh}"/>
+
+        </Grid>
+        
     </Grid>
 </UserControl>
