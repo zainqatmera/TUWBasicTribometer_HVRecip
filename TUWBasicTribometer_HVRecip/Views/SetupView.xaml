@@ -9,8 +9,35 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Content="Home" Command="{Binding HomeCommand}" HorizontalAlignment="Left" Margin="71,86,0,0" VerticalAlignment="Top"/>
-        <Button Content="Connect" Command="{Binding ConnectCommand}" HorizontalAlignment="Left" Margin="71,37,0,0" VerticalAlignment="Top"/>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
+            <GroupBox Header="Tribometer" Grid.Column="0" >
+                <StackPanel >
+                    <Button Margin="8" Content="Connect" Command="{Binding ConnectTribometerCommand}" />
+                    <Button Margin="8" Content="Home" Command="{Binding HomeCommand}" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Force Sensor" Grid.Column="2" >
+                <StackPanel Grid.Column="1" >
+                    <Button Margin="8" Content="Connect" Command="{Binding ConnectTribometerCommand}" />
+                    <Button Margin="8" Content="Zero" Command="{Binding HomeCommand}" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Settings" Grid.Column="4" >
+                <StackPanel Grid.Column="1" >
+                    <Button Margin="8" Content="Reload" Command="{Binding ReloadSettingsCommand}" />
+                </StackPanel>
+            </GroupBox>
+
+        </Grid>
     </Grid>
 </UserControl>

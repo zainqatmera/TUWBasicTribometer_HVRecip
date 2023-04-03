@@ -97,6 +97,9 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManualViewModel.cs" />
     <Compile Include="ViewModels\SerialMonitorWindowViewModel.cs" />
+    <Compile Include="ViewModels\SettingManualViewModel.cs" />
+    <Compile Include="ViewModels\SettingsVertRecipViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SetupViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
     <Compile Include="ViewModels\VerticalRecipViewModel.cs" />
@@ -117,6 +120,15 @@
     </Compile>
     <Compile Include="Views\SerialMonitorWindow.xaml.cs">
       <DependentUpon>SerialMonitorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingManualView.xaml.cs">
+      <DependentUpon>SettingManualView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsVertRecipView.xaml.cs">
+      <DependentUpon>SettingsVertRecipView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SetupView.xaml.cs">
       <DependentUpon>SetupView.xaml</DependentUpon>
@@ -152,6 +164,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SerialMonitorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingManualView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsVertRecipView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,30 +8,71 @@
         xmlns:prism="http://prismlibrary.com/"
         d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel}"
         mc:Ignorable="d"
-             Title="TUW Basic Tribometer - Horizontal/Vertical Reciprocating Controller" Height="450" Width="800">
+             Title="TUW Basic Tribometer - Horizontal/Vertical Reciprocating Controller" Height="600" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="195*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="621*"/>
+            <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="250*"/>
         </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" Background="DarkGray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
-        <!-- Log Control -->
-        <ContentControl Grid.Column="1" Grid.RowSpan="2" prism:RegionManager.RegionName="LogContentRegion" />
+        <!-- Main Panel -->
+        <Grid Grid.Column="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <!-- Upper Buttons -->
+            <Grid Grid.Row="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <!-- Menu Area -->
-        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
-            <Button Margin="4" Padding="8,0" Content="Setup" Command="{Binding MainNavigationCommand}" CommandParameter="Setup"/>
-            <Button Margin="4" Padding="8,0" Content="Manual" Command="{Binding MainNavigationCommand}" CommandParameter="Manual"/>
-            <Button Margin="4" Padding="8,0" Content="Horizontal Reciprocating" Command="{Binding MainNavigationCommand}" CommandParameter="Horizontal"/>
-            <Button Margin="4" Padding="8,0" Content="Vertical Reciprocating" Command="{Binding MainNavigationCommand}" CommandParameter="Vertical"/>
-        </StackPanel>
+                <!-- TODO: Don't use FontWeight binding! Should use a trigger property -->
+                <Button Grid.Column="0" Content="Setup" Command="{Binding SetupCommand}" Margin="4" FontWeight="{Binding SetupWeight}"/>
+                <Button Grid.Column="1" Content="Manual" Command="{Binding ManualCommand}" Margin="4" FontWeight="{Binding ManualWeight}" />
+                <Button Grid.Column="2" Content="Vertical" Command="{Binding VertRecipCommand}" Margin="4" FontWeight="{Binding VertWeight}" />
+                <Button Grid.Column="3" Content="Horizontal" Command="{Binding HorizRecipCommand}" Margin="4" FontWeight="{Binding HorizWeight}" />
+                <Button Grid.Column="4" Content="Settings" Command="{Binding SettingsCommand}" Margin="4" FontWeight="{Binding SettingsWeight}" />
 
-        <!-- Main Content -->
-        <ContentControl Grid.Column="0" Grid.Row="1" prism:RegionManager.RegionName="MainContentRegion" />
+                <Button Grid.Column="6" Content="STOP" Command="{Binding StopCommand}" Margin="4" />
+                <Button Grid.Column="7" Content="RAISE" Command="{Binding RaiseCommand}" Margin="4" />
+            </Grid>
+            
+            <!-- Main content region -->
+            <ContentControl Grid.Row="2" prism:RegionManager.RegionName="MainContentRegion" />
+
+        </Grid>
+        
+        <!-- RHS Panel -->
+        <Grid Grid.Column="2" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Status Control -->
+            <ContentControl Grid.Column="0" Grid.Row="1" prism:RegionManager.RegionName="StatusRegion" />
+
+            <!-- Log Control -->
+            <ContentControl Grid.Row="1" prism:RegionManager.RegionName="LogContentRegion" />
+
+            
+        </Grid>
+        
+        
+
 
     </Grid>
 </Window>

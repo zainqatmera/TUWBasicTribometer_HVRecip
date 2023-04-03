@@ -26,10 +26,17 @@ namespace TUWBasicTribometer_HVRecip
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
             ViewModelLocationProvider.Register<SerialMonitorWindow, SerialMonitorWindowViewModel>();
 
-            containerRegistry.RegisterForNavigation<SetupView, SetupViewModel>(PrismNavigationUri.Setup);
             containerRegistry.RegisterForNavigation<InfoLogView, InfoLogViewModel>(PrismNavigationUri.Log);
-            containerRegistry.RegisterForNavigation<ManualView, ManualViewModel>(PrismNavigationUri.Manual);
+            containerRegistry.RegisterForNavigation<StatusView, StatusViewModel>(PrismNavigationUri.Status);
 
+            containerRegistry.RegisterForNavigation<SetupView, SetupViewModel>(PrismNavigationUri.Setup);
+            containerRegistry.RegisterForNavigation<ManualView, ManualViewModel>(PrismNavigationUri.Manual);
+            containerRegistry.RegisterForNavigation<HorizontalRecipView, HorizontalRecipViewModel>(PrismNavigationUri.HorizRecip);
+            containerRegistry.RegisterForNavigation<VerticalRecipView, VerticalRecipViewModel>(PrismNavigationUri.VertRecip);
+            containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>(PrismNavigationUri.Settings);
+
+            containerRegistry.RegisterForNavigation<SettingManualView, SettingManualViewModel>(PrismNavigationUri.ManualSettings);
+            containerRegistry.RegisterForNavigation<SettingsVertRecipView, SettingsVertRecipViewModel>(PrismNavigationUri.VertRecipSettings);
 
           //  containerRegistry.RegisterSingleton<SerialPortManager>();
             containerRegistry.RegisterSingleton<TribometerController>();
@@ -47,6 +54,9 @@ namespace TUWBasicTribometer_HVRecip
             var regionManager = Container.Resolve<IRegionManager>();
             regionManager.RequestNavigate(PrismRegion.MainContentRegion, PrismNavigationUri.Setup);
             regionManager.RequestNavigate(PrismRegion.LogContentRegion, PrismNavigationUri.Log);
+            regionManager.RequestNavigate(PrismRegion.StatusRegion, PrismNavigationUri.Status);
+
+           
 
             /*            regionManager.RequestNavigate(RegionName.StatusTowerRegion,
                             NavigationUri.StatusTowerView);

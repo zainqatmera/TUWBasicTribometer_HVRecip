@@ -18,4 +18,16 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         Horizontal,
         Vertical
     }
+
+    enum OperatingState : byte
+    {
+        NotConnected,
+        Idle,
+        Homing,
+        ManualMove,         // Currently performing a move
+        RecipHorizontal,    // Currently reciprocating in horizontal motion
+        RecipVertical,      // Currently reciprocating in vertical motion
+        ErrorLimitSwitch    // Hit a limit switch during normal motion
+    }
+
 }

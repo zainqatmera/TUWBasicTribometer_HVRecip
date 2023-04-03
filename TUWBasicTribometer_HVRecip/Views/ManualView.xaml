@@ -12,17 +12,185 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
+
+        <Label Content="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+        <Label Content="Vertical" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="Step: " />
+            <Label Content="{Binding StepHorizontal}" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="{Binding PosHorizontal_mm}" />
+            <Label Content=" mm" Margin="8,0,0,0" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="Step: " />
+            <Label Content="{Binding StepVertical}" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="{Binding PosVertical_mm}" />
+            <Label Content=" mm" Margin="8,0,0,0" />
+        </StackPanel>
+
+        <!-- Controls Horizontal -->
         
+        <Grid Grid.Column="0" Grid.Row="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Height="30" Content="&lt;&lt;" Command="{Binding MoveCommand}" CommandParameter="H-2" Margin="8" />
+            <Button Grid.Column="1" Height="30" Content="&lt;" Command="{Binding MoveCommand}" CommandParameter="H-1" Margin="8" />
+            <Button Grid.Column="2" Height="30" Content="Centre" Command="{Binding MoveToCommand}" CommandParameter="HCentre" Margin="8" />
+            <Button Grid.Column="3" Height="30" Content="&gt;" Command="{Binding MoveCommand}" CommandParameter="H+2" Margin="8" />
+            <Button Grid.Column="4" Height="30" Content="&gt;&gt;" Command="{Binding MoveCommand}" CommandParameter="H+2" Margin="8" />
+        </Grid>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">
+            <RadioButton Margin="4,4,28,4" Content="Normal" />
+            <RadioButton Margin="4" Content="Precision" IsChecked="{Binding IsHorizontalPrecisionMode}" />
+        </StackPanel>
+
+        <!-- Controls Vertical -->
+
+        <Grid Grid.Column="1" Grid.Row="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Column="0" Width="100" HorizontalAlignment="Center">
+                <Button Grid.Column="0" Content="^^" Command="{Binding MoveCommand}" CommandParameter="V-2" Margin="4" />
+                <Button Grid.Column="1" Content="^" Command="{Binding MoveCommand}" CommandParameter="V-1" Margin="4" />
+                <Button Grid.Column="1" Content="^" Command="{Binding MoveCommand}" CommandParameter="V+1" Margin="4" />
+                <Button Grid.Column="0" Content="^^" Command="{Binding MoveCommand}" CommandParameter="V+2" Margin="4" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" >
+                <Button Content="Raise" Command="{Binding MoveToCommand}" CommandParameter="VRaise" Margin="8" />
+                <Button Content="Lower" Command="{Binding MoveToCommand}" CommandParameter="VLower" Margin="8" />
+                <Button Content="Load" Command="{Binding MoveToCommand}" CommandParameter="VLoad" Margin="8" />
+            </StackPanel>
+
+
+        </Grid>
+        
+        <!-- Precision / Normal -->
+
+        <StackPanel Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">
+            <RadioButton Margin="4,4,28,4" Content="Normal" />
+            <RadioButton Margin="4" Content="Precision" IsChecked="{Binding IsHorizontalPrecisionMode}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+            <RadioButton Margin="4,4,28,4" Content="Normal" />
+            <RadioButton Margin="4" Content="Precision" IsChecked="{Binding IsVerticalPrecisionMode}" />
+        </StackPanel>
+
+        <!-- Goto Position -->
+        <Grid Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Content="{Binding GotoHLabelText, FallbackValue='Pos'}" Margin="4"/>
+                <TextBox Text="{Binding GotoPositionHorizontal}" Width="100" VerticalAlignment="Center" />
+                <Button Content="Goto" Command="{Binding MoveToCommand}" CommandParameter="HGoto" VerticalAlignment="Center" Margin="4"/>
+            </StackPanel>
+
+            <CheckBox Grid.Row="1" Content="Use step number" HorizontalAlignment="Center" IsChecked="{Binding StepForGotoHorizontal}" />
+        </Grid>
+
+        <Grid Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Content="{Binding GotoVLabelText, FallbackValue='Pos'}" Margin="4"/>
+                <TextBox Text="{Binding GotoPositionVertical}" Width="100" VerticalAlignment="Center" />
+                <Button Content="Goto" Command="{Binding MoveToCommand}" CommandParameter="VGoto" VerticalAlignment="Center" Margin="4"/>
+            </StackPanel>
+
+            <CheckBox Grid.Row="1" Content="Use step number" HorizontalAlignment="Center" IsChecked="{Binding StepForGotoVertical}" />
+        </Grid>
+
+        <!-- Set Markers -->
+        <Grid Grid.Column="0" Grid.Row="6" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="{Binding StepHCentre}" HorizontalAlignment="Center" />
+            <Label Grid.Row="1" Grid.Column="0" Content="{Binding StepHLeft}" HorizontalAlignment="Center" />
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding StepHRight}" HorizontalAlignment="Center" />
+            
+            <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="8" Content="Set Current As Centre" Command="{Binding SetMark}" CommandParameter="HCentre}" />
+            <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="8" Content="Set Current As Left" Command="{Binding SetMark}" CommandParameter="HLeft}" />
+            <Button Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="8" Content="Set Current As Right" Command="{Binding SetMark}" CommandParameter="HRight}" />
+        </Grid>
+        
+        <Grid Grid.Column="1" Grid.Row="6" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="{Binding StepVRaise}" HorizontalAlignment="Center" />
+            <Label Grid.Row="1" Grid.Column="0" Content="{Binding StepVLower}" HorizontalAlignment="Center" />
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding StepVLoaded}" HorizontalAlignment="Center" />
+            
+            <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="8" Content="Set Current As Raise" Command="{Binding SetMark}" CommandParameter="VRaise}" />
+            <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="8" Content="Set Current As Unloaded" Command="{Binding SetMark}" CommandParameter="VUnloaded}" />
+            <Button Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="8" Content="Set Current As Load" Command="{Binding SetMark}" CommandParameter="VLoad}" />
+        </Grid>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <Grid Visibility="Hidden" Grid.Row="100">
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Content="^^" Command="{Binding MoveCommand}" CommandParameter="U2"/>
             <Button Content="^" Command="{Binding MoveCommand}" CommandParameter="U1"/>
@@ -87,6 +255,6 @@
             <TextBox Grid.Row="3" Grid.Column="1" Width="75" Text="{Binding StepsPerMoveVHigh}"/>
 
         </Grid>
-        
+        </Grid>
     </Grid>
 </UserControl>

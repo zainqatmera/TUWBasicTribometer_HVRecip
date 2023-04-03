@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="TUWBasicTribometer_HVRecip.Views.SettingManualView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"
+             xmlns:vms="clr-namespace:TUWBasicTribometer_HVRecip.ViewModels"
+             xmlns:prism="http://prismlibrary.com/"
+             d:DataContext="{d:DesignInstance Type=vms:SettingManualViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Content="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+        <Label Content="Vertical" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+
+        <!-- Move Steps -->
+        <Grid Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Move steps" HorizontalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="1" Content="Precision small" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="2" Content="Precision large" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="3" Content="Normal small" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="4" Content="Normal large" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsPrecisionSmallH}" />
+            <TextBox Grid.Column="1" Grid.Row="2" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsPrecisionLargeH}" />
+            <TextBox Grid.Column="1" Grid.Row="3" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsNormalSmallH}" />
+            <TextBox Grid.Column="1" Grid.Row="4" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsNormalLargeH}" />
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Move steps" HorizontalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="1" Content="Precision small" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="2" Content="Precision large" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="3" Content="Normal small" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="4" Content="Normal large" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsPrecisionSmallV}" />
+            <TextBox Grid.Column="1" Grid.Row="2" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsPrecisionLargeV}" />
+            <TextBox Grid.Column="1" Grid.Row="3" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsNormalSmallV}" />
+            <TextBox Grid.Column="1" Grid.Row="4" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StepsNormalLargeV}" />
+        </Grid>
+
+        <!-- Speed/Accel -->
+        <Grid Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Content="Max Speed (steps/s)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="1" Content="Accel (steps/s/s)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MaxSpeedH}" />
+            <TextBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding AccelH}" />
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Content="Max Speed (steps/s)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="1" Content="Accel (steps/s/s)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MaxSpeedV}" />
+            <TextBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding AccelV}" />
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -162,6 +162,15 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             InfoLogIssued?.Invoke(this, $"{axis} datum found at {pos}");
         }
 
+        internal void Stop()
+        {
+
+        }
+
+        internal void EmergencyRaise()
+        {
+        }
+
 
 
         // Nested 

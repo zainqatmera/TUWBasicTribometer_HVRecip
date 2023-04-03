@@ -19,8 +19,22 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             _controller = container.Resolve<TribometerController>();
 
             HomeCommand = new DelegateCommand(InitiateHoming);
-            ConnectCommand = new DelegateCommand(ConnectTribometer);
-            
+            ConnectTribometerCommand = new DelegateCommand(ConnectTribometer);
+            ConnectSensorCommand = new DelegateCommand(ConnectSensor);
+            ZeroSensorCommand = new DelegateCommand(ZeroSensor);
+            ReloadSettingsCommand = new DelegateCommand(ReloadSettings);
+        }
+
+        private void ReloadSettings()
+        {
+        }
+
+        private void ZeroSensor()
+        {
+        }
+
+        private void ConnectSensor()
+        {
         }
 
         private void InitiateHoming()
@@ -33,12 +47,13 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             _controller.Connect();
         }
 
-
-
         // Bindings
 
         public DelegateCommand HomeCommand { get; private set; }
-        public DelegateCommand ConnectCommand { get; private set; }
+        public DelegateCommand ReloadSettingsCommand { get; private set; }
+        public DelegateCommand ConnectTribometerCommand { get; private set; }
+        public DelegateCommand ConnectSensorCommand { get; private set; }
+        public DelegateCommand ZeroSensorCommand { get; private set; }
 
     }
 }
