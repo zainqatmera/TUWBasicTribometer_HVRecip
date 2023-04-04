@@ -91,6 +91,7 @@
     <Compile Include="Controllers\SerialPortManager.cs" />
     <Compile Include="Controllers\TribometerController.cs" />
     <Compile Include="Controllers\TribometerSettings.cs" />
+    <Compile Include="InverseBooleanConverter.cs" />
     <Compile Include="PrismConstants.cs" />
     <Compile Include="ViewModels\HorizontalRecipViewModel.cs" />
     <Compile Include="ViewModels\InfoLogViewModel.cs" />

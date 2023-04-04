@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TUWBasicTribometer_HVRecip.Controllers
 {
-    internal class TribometerSettings
+    public class TribometerSettings
     {
-        // Singleton
+/*        // Singleton - replaced by container singleton
         private TribometerSettings() { }   
         private static TribometerSettings _instance;
         public static TribometerSettings Instance => _instance ??= new TribometerSettings();
-
+*/
         public bool LoadFromSettingsFile()
         {
             // TODO: Load settings from a settings file (yaml)
@@ -35,6 +35,11 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         // User-settings 
         public int stepPosHCentre = 1000;     // Steps from limit switch datum to "centre"
+
+        public int? stepPosVRaised = null;
+        public int? stepPosVUnloaded = null;
+        public int? stepPosVLoaded = null;
+
 
         // Movement steps for manual contrl
         public int moveStepsHPrecisionLow = 1;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TUWBasicTribometer_HVRecip.Controllers
 {
-   enum MessageAck
+    public enum MessageAck
     {
        Accepted = 0,
        Unknown,
@@ -14,12 +14,12 @@ namespace TUWBasicTribometer_HVRecip.Controllers
        Busy
     }
 
-    enum TribometerAxis {
+    public enum TribometerAxis {
         Horizontal,
         Vertical
     }
 
-    enum OperatingState : byte
+    public enum OperatingState : byte
     {
         NotConnected,
         Idle,

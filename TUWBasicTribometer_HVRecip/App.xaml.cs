@@ -40,6 +40,7 @@ namespace TUWBasicTribometer_HVRecip
 
           //  containerRegistry.RegisterSingleton<SerialPortManager>();
             containerRegistry.RegisterSingleton<TribometerController>();
+            containerRegistry.RegisterSingleton<TribometerSettings>();
 
         }
 

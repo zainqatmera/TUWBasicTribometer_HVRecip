@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace TUWBasicTribometer_HVRecip.Controllers
 {
-    internal class TribometerController
+    public class TribometerController
     {
         private SerialPortManager serialPortManager;
         private TribometerState _state;
 
-        public TribometerController()
-        {
+        public TribometerSettings Settings { get; set; }
 
+        public TribometerController()
+        {            
         }
 
         public TribometerState State { 
@@ -43,7 +44,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
                 serialPortManager.MessageReceived += SerialPortManager_MessageReceived;
                 serialPortManager.TextReceived += SerialPortManager_TextReceived;
 
-                serialPortManager.Connect(TribometerSettings.Instance.ComPortTribometer, TribometerSettings.Instance.ComPortTribometerBaudRate);
+                serialPortManager.Connect(Settings.ComPortTribometer, Settings.ComPortTribometerBaudRate);
             }
 
             serialPortManager.StartMessaging();

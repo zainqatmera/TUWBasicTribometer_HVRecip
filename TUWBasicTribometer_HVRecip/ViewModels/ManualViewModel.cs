@@ -65,7 +65,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             switch (obj)
             {
                 case "HC":
-                    _controller.MoveTo(TribometerAxis.Horizontal, TribometerSettings.Instance.stepPosHCentre); 
+                    _controller.MoveTo(TribometerAxis.Horizontal, _settings.stepPosHCentre); 
                     break;
 /*                case "H":
                     _controller.MoveTo(TribometerAxis.Horizontal, GotoTextHorizontal);
