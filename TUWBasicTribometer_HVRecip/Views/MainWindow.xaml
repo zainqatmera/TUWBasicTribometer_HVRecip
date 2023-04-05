@@ -59,14 +59,14 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <!-- Status Control -->
-            <ContentControl Grid.Column="0" Grid.Row="1" prism:RegionManager.RegionName="StatusRegion" />
+            <ContentControl Grid.Row="0" prism:RegionManager.RegionName="StatusRegion" />
 
             <!-- Log Control -->
-            <ContentControl Grid.Row="1" prism:RegionManager.RegionName="LogContentRegion" />
+            <ContentControl Grid.Row="2" prism:RegionManager.RegionName="LogContentRegion" />
 
             
         </Grid>

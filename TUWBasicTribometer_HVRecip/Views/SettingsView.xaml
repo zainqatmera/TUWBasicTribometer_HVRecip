@@ -7,7 +7,14 @@
              xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="Header" Value="{Binding DataContext.Title}" />
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <TabControl prism:RegionManager.RegionName="SettingsTabControlRegion" />
+
     </Grid>
 </UserControl>

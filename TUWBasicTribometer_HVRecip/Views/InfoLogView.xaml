@@ -9,7 +9,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox Margin="2" ItemsSource="{Binding IncomingMessages}" Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Log" />
+            <Button Grid.Column="1" Content="Clear" Command="{Binding ClearLogCommand}" Margin="4"/>
+        </Grid>
+        
+        <ListBox Grid.Row="1" Margin="2" ItemsSource="{Binding IncomingMessages}" Background="AliceBlue">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

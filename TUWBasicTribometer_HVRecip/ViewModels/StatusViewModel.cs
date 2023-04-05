@@ -1,17 +1,53 @@
-﻿using Prism.Mvvm;
+﻿using DryIoc;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TUWBasicTribometer_HVRecip.Controllers;
+using System.Windows;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
     internal class StatusViewModel : BindableBase
     {
-        public StatusViewModel() 
+        public StatusViewModel(IContainer container) 
         { 
+            var forceSensor = container.Resolve<ForceSensor>(); 
+            var controller = container.Resolve<TribometerController>();
+
+            forceSensor.ForceSensorDataAvailable += ForceSensor_ForceSensorDataAvailable;
+            forceSensor.ForceSensorError += ForceSensor_ForceSensorError;
+            controller.StateChanged += Controller_StateChanged;
+            controller.PositionUpdated += Controller_PositionUpdated;
+        }
+
+        private void Controller_PositionUpdated(object sender, TribometerPositionEventArgs e)
+        {
+            // TODO: Hide when position is null (moving or not homed)
+            HPos_step = e.HorizontalStepPosition ?? 0;
+            VPos_step = e.VerticalStepPosition ?? 0;
+        }
+
+        private void Controller_StateChanged(object sender, OperatingState e)
+        {
+            CurrentOperatingState = e;
+        }
+
+        private void ForceSensor_ForceSensorError(object sender, EventArgs e)
+        {
+            MessageBox.Show("Force sensor error");
+        }
+
+        private void ForceSensor_ForceSensorDataAvailable(object sender, ForceSensorEventArgs e)
+        {
+            Fx = e.FTValues[0].ToString("F2");
+            Fy = e.FTValues[1].ToString("F2");
+            Fz = e.FTValues[2].ToString("F2");
+            Tx = e.FTValues[3].ToString("F2");
+            Ty = e.FTValues[4].ToString("F2");
+            Tz = e.FTValues[5].ToString("F2");
         }
 
         private OperatingState _currentOperatingState;

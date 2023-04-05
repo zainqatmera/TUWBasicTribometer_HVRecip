@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="4" Background="Linen">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -41,8 +41,8 @@
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="V:" />
-            <Label Grid.Column="1" Content="{Binding HPos_mm}" />
-            <Label Grid.Column="2" Content="{Binding HPos_step}" Foreground="Blue" />
+            <Label Grid.Column="1" Content="{Binding VPos_mm}" />
+            <Label Grid.Column="2" Content="{Binding VPos_step}" Foreground="Blue" />
         </Grid>
         
         <!-- Force sensor -->

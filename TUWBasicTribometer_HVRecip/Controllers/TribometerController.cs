@@ -10,15 +10,23 @@ namespace TUWBasicTribometer_HVRecip.Controllers
     public class TribometerController
     {
         private SerialPortManager serialPortManager;
-        private TribometerState _state;
+        private OperatingState _state;
+        private int currentHPos;
+        private int currentVPos;
+
+        private int currentTestCycleCount = 0;
+
+        public int PositionH => currentHPos;
+        public int PositionV => currentVPos;
 
         public TribometerSettings Settings { get; set; }
+
 
         public TribometerController()
         {            
         }
 
-        public TribometerState State { 
+        public OperatingState State { 
             get => _state; 
             set { 
                 if (value != _state)
@@ -31,8 +39,10 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         // Events 
 
-        public event EventHandler<TribometerState> StateChanged;
-        public event EventHandler<string> InfoLogIssued;        
+        public event EventHandler<TribometerPositionEventArgs> PositionUpdated;
+        public event EventHandler<OperatingState> StateChanged;
+        public event EventHandler<string> InfoLogIssued;
+        public event EventHandler<int> TestCycleCountUpdated;
 
         // Methods - General connection and messaging
 
@@ -72,6 +82,8 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         public void MoveTo(TribometerAxis axis, int stepPosition)
         {
+            SetMotorControlParamsManual();
+
             byte[] buffer = new byte[5];
             MemoryStream ms = new MemoryStream(buffer);
             BinaryWriter bw = new BinaryWriter(ms);
@@ -82,6 +94,8 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         internal void Move(TribometerAxis axis, int moveSteps)
         {
+            SetMotorControlParamsManual();
+
             byte[] buffer = new byte[5];
             MemoryStream ms = new MemoryStream(buffer);
             BinaryWriter bw = new BinaryWriter(ms);
@@ -114,6 +128,12 @@ namespace TUWBasicTribometer_HVRecip.Controllers
                 case MessageCode.MessageResponse:
                     ProcessMessageResponse(e);
                     break;
+                case MessageCode.StatusOperatingState:
+                    ProcessStatusOperatingState(e);
+                    break;
+                case MessageCode.CyclePointMark:
+                    ProcessCyclePointMark(e);
+                    break;
                 default:
                     {
                         string data = "";
@@ -127,6 +147,15 @@ namespace TUWBasicTribometer_HVRecip.Controllers
                     break;
             }
 
+        }
+
+        private void ProcessCyclePointMark(byte[] e)
+        {
+            if (e[1] == 5)
+            {
+                currentTestCycleCount++;
+                TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
+            }
         }
 
         private void ProcessMessageResponse(byte[] e)
@@ -146,11 +175,21 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             MemoryStream ms = new MemoryStream(e);
             BinaryReader br = new BinaryReader(ms);
             br.ReadByte();  // Message code
-            int hpos = br.ReadInt32();
-            int vpos = br.ReadInt32();
+            currentHPos = br.ReadInt32();
+            currentVPos = br.ReadInt32();
 
-            InfoLogIssued?.Invoke(this, $"Stopped at H: {hpos} V: {vpos}");
+            InfoLogIssued?.Invoke(this, $"Stopped at H: {currentHPos} V: {currentVPos}");
+            PositionUpdated?.Invoke(this, new TribometerPositionEventArgs(currentHPos, currentVPos));
         }
+
+        private void ProcessStatusOperatingState(byte[] e)
+        {
+            MemoryStream ms = new MemoryStream(e);
+            BinaryReader br = new BinaryReader(ms);
+            br.ReadByte();  // Message code
+            State = (OperatingState)br.ReadByte();
+        }
+
 
         private void ProcessSetDatum(byte[] e)
         {
@@ -163,29 +202,76 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             InfoLogIssued?.Invoke(this, $"{axis} datum found at {pos}");
         }
 
+
+        // Other outgoing commands
+
+        void SetMotorControlParamsManual()
+        {
+            SetMotorControlParams(Settings.moveMaxSpeedH, Settings.moveAccelH, Settings.moveMaxSpeedV, Settings.moveAccelV);
+        }
+
+        public void SetMotorControlParams(float hSpeed, float hAccel, float vSpeed, float vAccel)
+        {
+            byte[] data = new byte[6];
+            MemoryStream ms = new MemoryStream(data);
+            BinaryWriter bw = new BinaryWriter(ms);
+            
+            bw.Write((byte)TribometerAxis.Horizontal);
+            bw.Write((byte)MotorControlParam.MaxSpeed);
+            bw.Write(hSpeed);
+            SendCommand(MessageCode.SetMotorControlParam, data);
+
+            ms.Position = 0;
+            bw.Write((byte)TribometerAxis.Horizontal);
+            bw.Write((byte)MotorControlParam.Accel);
+            bw.Write(hAccel);
+            SendCommand(MessageCode.SetMotorControlParam, data);
+
+            ms.Position = 0;
+            bw.Write((byte)TribometerAxis.Vertical);
+            bw.Write((byte)MotorControlParam.MaxSpeed);
+            bw.Write(vSpeed);
+            SendCommand(MessageCode.SetMotorControlParam, data);
+
+            ms.Position = 0;
+            bw.Write((byte)TribometerAxis.Vertical);
+            bw.Write((byte)MotorControlParam.Accel);
+            bw.Write(vAccel);
+            SendCommand(MessageCode.SetMotorControlParam, data);
+
+
+        }
+
+        internal void SetMotorControlParamsVertTest()
+        {
+            SetMotorControlParams(Settings.vertTestMaxSpeedH, Settings.vertTestAccelH, Settings.vertTestMaxSpeedV, Settings.vertTestAccelV);
+        }
         internal void Stop()
         {
-
+            SendCommand(MessageCode.StopMotion);
         }
 
         internal void EmergencyRaise()
         {
+            SendCommand(MessageCode.EmergencyRaiseUp);
         }
 
-
-
-        // Nested 
-
-        public enum TribometerState
+        internal void StartVertRecipTest()
         {
-            NotConnected,
-            Idle,
-            ManualMove,   // Currently moving
-            ReciprocatingH,
-            ReciprocatingV
+            currentTestCycleCount = 0;
+            TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
+
+            byte[] buffer = new byte[20];
+            MemoryStream ms = new MemoryStream(buffer);
+            BinaryWriter bw = new BinaryWriter(ms);
+            bw.Write(Settings.stepPosVUnloaded.Value);
+            bw.Write(Settings.stepPosVLoaded.Value);
+            bw.Write(Settings.vertTestPauseTimeUnloaded);
+            bw.Write(Settings.vertTestPauseTimeLoaded);
+            bw.Write(Settings.vertTestNumberOfCycles);
+
+            SetMotorControlParamsVertTest();
+            SendCommand(MessageCode.StartVerticalReciprocation, buffer);
         }
-
-        
-
     }
 }

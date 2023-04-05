@@ -10,14 +10,33 @@ namespace TUWBasicTribometer_HVRecip.Controllers
     {
         StopMotion = 0,
         Home = 1,
-        MoveRel = 2,    // Data[0] = Axis, Data[1...5] move steps
-        MoveTo = 3,     // Data[0] = Axis, Data[1...5] move to position
+        MoveRel = 2,    // Data[0] = Axis, Data[1...4] move steps
+        MoveTo = 3,     // Data[0] = Axis, Data[1...4] move to position
 
-        // Incoming
+        RequestStatus = 9,
+
+
+        StartVerticalReciprocation = 10,        // Data[0...3] MinPosition (Unloaded), Data[4...7] MaxPosition (Loaded)
+
+        EndTest = 15,
+
+        SetMotorControlParam = 20,   // Data[0] = Axis, Data[1] = MotorControlParam, Data[2..?] = value
+
+
+        ClearError = 99,    // Reset to idle from an error state;
+        EmergencyRaiseUp = 100,  // Raise the vertical axis to avoid force sensor overload, and stop h
+
+        // OUTGOING
         SetDatumPosition = 128,   // The position of the homed limit switch Data[0] = AXIS; Data[1..8] = long position
-        
-        StatusPosition = 140,   // Data[0..3] = Horizontal position, Data[4..7] = Vertical position
 
+        StatusOperatingState = 140,     // Send when the operating state is changed  data[0] = operating state
+        StatusPosition = 141,   // Data[0..3] = Horizontal position, Data[4..7] = Vertical position
+        StatusMotorControlParam = 142,  // Data[0] = Axis, Data[1] = MotorControlParam, Data[2..?] = Value
+
+        CyclePointMark = 150,   // Mark a point in reciprocation cycle: data[0] = marker identifier
+        RecipEnd = 151,         // Reciprocating motion has ended
+
+        ErrorAlarm = 199,       // An error state has been raised ; Data[0] = ErrorAlarmType
         TextLog = 200,
 
         MessageResponse = 255   // Data[0] = MessageId of received message, Data[1] = Ack

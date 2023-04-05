@@ -1,4 +1,5 @@
 ﻿using DryIoc;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         {
             _controller = container.Resolve<TribometerController>();
             _controller.InfoLogIssued += TribometerController_InfoLogIssued;
+
+            ClearLogCommand = new DelegateCommand(() => IncomingMessages.Clear());
         }
 
         public void Dispose()
@@ -35,6 +38,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             });
         }
 
+        public DelegateCommand ClearLogCommand { get; }
 
         private ObservableCollection<string> _incomingMessages = new ObservableCollection<string>();
         public ObservableCollection<string> IncomingMessages

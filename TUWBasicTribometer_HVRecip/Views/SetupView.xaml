@@ -22,13 +22,14 @@
                 <StackPanel >
                     <Button Margin="8" Content="Connect" Command="{Binding ConnectTribometerCommand}" />
                     <Button Margin="8" Content="Home" Command="{Binding HomeCommand}" />
+                    <Button Margin="8" Content="Clear" Command="{Binding ClearErrorsCommand}" />
                 </StackPanel>
             </GroupBox>
 
             <GroupBox Header="Force Sensor" Grid.Column="2" >
                 <StackPanel Grid.Column="1" >
-                    <Button Margin="8" Content="Connect" Command="{Binding ConnectTribometerCommand}" />
-                    <Button Margin="8" Content="Zero" Command="{Binding HomeCommand}" />
+                    <Button Margin="8" Content="Connect" Command="{Binding ConnectSensorCommand}" />
+                    <Button Margin="8" Content="Zero" Command="{Binding ZeroSensorCommand}" />
                 </StackPanel>
             </GroupBox>
 

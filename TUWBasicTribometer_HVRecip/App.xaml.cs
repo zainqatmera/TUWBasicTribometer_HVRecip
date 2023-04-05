@@ -41,6 +41,7 @@ namespace TUWBasicTribometer_HVRecip
           //  containerRegistry.RegisterSingleton<SerialPortManager>();
             containerRegistry.RegisterSingleton<TribometerController>();
             containerRegistry.RegisterSingleton<TribometerSettings>();
+            containerRegistry.RegisterSingleton<ForceSensor>();
 
         }
 
@@ -57,7 +58,13 @@ namespace TUWBasicTribometer_HVRecip
             regionManager.RequestNavigate(PrismRegion.LogContentRegion, PrismNavigationUri.Log);
             regionManager.RequestNavigate(PrismRegion.StatusRegion, PrismNavigationUri.Status);
 
-           
+            var settings = Container.Resolve<TribometerSettings>();
+            var controller = Container.Resolve<TribometerController>();
+            var forceSensor = Container.Resolve<ForceSensor>(); 
+
+            controller.Settings = settings;
+            forceSensor.Settings = settings;
+
 
             /*            regionManager.RequestNavigate(RegionName.StatusTowerRegion,
                             NavigationUri.StatusTowerView);

@@ -37,11 +37,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ATICombinedDAQFT">
+      <HintPath>.\ATICombinedDAQFT.dll</HintPath>
+    </Reference>
     <Reference Include="DryIoc, Version=4.7.7.0, Culture=neutral, PublicKeyToken=dfbf2bd50fcf7768, processorArchitecture=MSIL">
       <HintPath>..\packages\DryIoc.dll.4.7.7\lib\net45\DryIoc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.Common">
+      <HintPath>.\NationalInstruments.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.DAQmx">
+      <HintPath>.\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
     <Reference Include="Prism, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.8.1.97\lib\net47\Prism.dll</HintPath>
@@ -87,10 +96,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controllers\Enums.cs" />
+    <Compile Include="Controllers\ForceSensor.cs" />
+    <Compile Include="Controllers\ForceSensorEventArgs.cs" />
     <Compile Include="Controllers\MessageId.cs" />
     <Compile Include="Controllers\SerialPortManager.cs" />
     <Compile Include="Controllers\TribometerController.cs" />
+    <Compile Include="Controllers\TribometerPositionEventArgs.cs" />
     <Compile Include="Controllers\TribometerSettings.cs" />
+    <Compile Include="Controllers\VerticalRecipSettings.cs" />
     <Compile Include="InverseBooleanConverter.cs" />
     <Compile Include="PrismConstants.cs" />
     <Compile Include="ViewModels\HorizontalRecipViewModel.cs" />

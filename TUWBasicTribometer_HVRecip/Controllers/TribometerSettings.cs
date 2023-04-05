@@ -8,15 +8,27 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 {
     public class TribometerSettings
     {
-/*        // Singleton - replaced by container singleton
-        private TribometerSettings() { }   
-        private static TribometerSettings _instance;
-        public static TribometerSettings Instance => _instance ??= new TribometerSettings();
-*/
+        /*        // Singleton - replaced by container singleton
+                private TribometerSettings() { }   
+                private static TribometerSettings _instance;
+                public static TribometerSettings Instance => _instance ??= new TribometerSettings();
+        */
+
+        public TribometerSettings()
+        {
+        }
+
+        public event EventHandler SettingsChanged;
+
         public bool LoadFromSettingsFile()
         {
             // TODO: Load settings from a settings file (yaml)
             return false;
+        }
+
+        public void NotifySettingsChanged()
+        {
+            SettingsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         // Design Fixed
@@ -34,7 +46,9 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public int ComPortTribometerBaudRate = 115200;
 
         // User-settings 
-        public int stepPosHCentre = 1000;     // Steps from limit switch datum to "centre"
+        public int? stepPosHCentre = null;     // Steps from limit switch datum to "centre"
+        public int? stepPosHLeft = null;     // Steps from limit switch datum to "left"
+        public int? stepPosHRight = null;     // Steps from limit switch datum to "right"
 
         public int? stepPosVRaised = null;
         public int? stepPosVUnloaded = null;
@@ -63,5 +77,17 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public float vertTestAccelH = 1000;
         public float vertTestAccelV = 1000;
 
+        // Sensor
+        public string CalibrationFile = @"C:\Users\Administrator\Desktop\Tribometer\FT36487.cal";
+        public string DaqDevice = "dev1";
+        public int ForceSensorSampleRateHz = 1000;
+        public int ForceSensorAveragingLevel = 16;
+        public int ForceSensorFirstChannel = 0;
+        public int ForceSensorMeasureInterval_ms = 100;
+
+        // Vertical Test conditions
+        internal int vertTestPauseTimeUnloaded;
+        internal int vertTestPauseTimeLoaded;
+        internal int vertTestNumberOfCycles;
     }
 }
