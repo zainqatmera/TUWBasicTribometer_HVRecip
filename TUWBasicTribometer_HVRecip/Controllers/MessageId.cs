@@ -48,6 +48,15 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         // 4 bytes : (long) Loaded position 
         StartHorizontalReciprocation = 11,
 
+        // Adjust the load during a test
+        // 4 bytes : (long) steps to move
+        AdjustLoadMoveVertical = 12,
+
+        // Adjust the load during a test, moving to specific position
+        // 4 bytes : (long) position to move to
+        AdjustLoadMoveVerticalTo = 13,
+
+
         // End the current test (horizontal or vertical) at the end of the current cycle
         EndTest = 15,
 
@@ -94,11 +103,17 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         StatusMotorControlParam = 142,  // Data[0] = Axis, Data[1] = MotorControlParam, Data[2..?] = Value
 
         // Notify of reaching a point in a test cycle
-        // 1 byte  : identifier
+        // 1 byte  : identifier;  Value 1 is completion of a cycle and all other values are optional
         CyclePointMark = 150,
 
+        // Notify start of Horizontal Reciprocating Test
+        RecipHorizStart = 151,
+
+        // Notify start of Vertical Reciprocating Test
+        RecipVertStart = 152,
+
         // Notify of end of test (number of cycles reached)
-        RecipEnd = 151,
+        RecipTestEnd = 153,
 
         // Notify of an error state
         // 1 byte  : Error type

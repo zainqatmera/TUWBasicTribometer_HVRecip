@@ -33,6 +33,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 _controller.SendCommand(MessageCode.RequestStatus);
             }
             
+            Settings_SettingsChanged(this, EventArgs.Empty);
         }
 
         private void Controller_PositionUpdated(object sender, TribometerPositionEventArgs e)

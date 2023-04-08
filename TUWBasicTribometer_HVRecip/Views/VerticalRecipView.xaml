@@ -42,7 +42,7 @@
                 <TextBox Text="{Binding TestName}" />
                 <Rectangle Height="10" />
                 <TextBlock Text="{Binding SavePath, FallbackValue='The Directory'}" FontSize="8" TextWrapping="Wrap"/>
-                <Button Content="Change path" Command="{Binding ChangeDirCommand}" HorizontalAlignment="Left"/>
+                <Button Content="Change path" Command="{Binding ChangeDirCommand}" HorizontalAlignment="Left" IsEnabled="False"/>
                 
 
 

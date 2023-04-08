@@ -30,12 +30,13 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
 
             _controller.TestCycleCountUpdated += _controller_TestCycleCountUpdated;
             _controller.StateChanged += _controller_StateChanged;
+            _controller.TestStartedNotification += _controller_TestStartedNotification;
 
-            IsReciprocating = false;
+            ShowTestInfo = false;
 
             LoadingProfilesAvailable = new ObservableCollection<NormalLoadingProfile>() { NormalLoadingProfile.ManualControl, NormalLoadingProfile.LoadBeforeStart };
 
-            SavePath = _settings.SaveFilePath;
+            SavePath = _settings.SaveFilePathHorizTests;
             IsFixedNumberOfCycles = _settings.horizTestStopAtNumberOfCycles;
             IsManualEnd = !_settings.horizTestStopAtNumberOfCycles;
             TargetNumberOfCycles = _settings.horizTestTargetNumberOfCycles;
@@ -48,9 +49,8 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             UnloadCommand = new DelegateCommand(RemoveNormalLoad, CanChangeLoad);
             IncreaseLoadCommand = new DelegateCommand(IncreaseNormalLoad, CanChangeLoad);
             DecreaseLoadCommand = new DelegateCommand(DecreaseNormalLoad, CanChangeLoad);
-
-
         }
+
 
         // Commands and CanExecutes
 
@@ -73,23 +73,23 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         private void ApplyNormalLoad()
         {
             if (_settings.stepPosVLoaded.HasValue)
-                _controller.MoveTo(TribometerAxis.Vertical, _settings.stepPosVLoaded.Value);
+                _controller.AdjustLoadToPosition(_settings.stepPosVLoaded.Value);
         }
 
         private void RemoveNormalLoad()
         {
             if (_settings.stepPosVUnloaded.HasValue)
-                _controller.MoveTo(TribometerAxis.Vertical, _settings.stepPosVUnloaded.Value);
+                _controller.AdjustLoadToPosition(_settings.stepPosVUnloaded.Value);
         }
 
         private void IncreaseNormalLoad()
         {
-            _controller.Move(TribometerAxis.Vertical, adjustLoadMoveSteps);
+            _controller.AdjustLoad(adjustLoadMoveSteps);
         }
 
         private void DecreaseNormalLoad()
         {
-            _controller.Move(TribometerAxis.Vertical, -adjustLoadMoveSteps);
+            _controller.AdjustLoad(-adjustLoadMoveSteps);
         }
 
         private void StartTest()
@@ -116,14 +116,14 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         {
             if (e == OperatingState.RecipHorizontal)
             {
-                IsReciprocating = true;          
+                ShowTestInfo = true;          
             } else
             {
-                if (IsReciprocating)
+                if (ShowTestInfo)
                 {
                     HandleEndOfTest();
                 }
-                IsReciprocating = false;
+                ShowTestInfo = false;
             }
 
             StartCommand?.RaiseCanExecuteChanged();
@@ -147,14 +147,6 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 if (e < 0) { NumberOfCyclesCompleted = 0; }
                 else { NumberOfCyclesCompleted = e; }
             }));
-
-            if (e == 0)
-            {
-                // Start Test Time at first mark
-                startTime = DateTime.Now;
-                testTimer = new Timer(TestTimerTick);
-                testTimer.Change(0, 1000);
-            }
         }
 
         private void TestTimerTick(object state)
@@ -168,10 +160,19 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                     TimeElapsed = timeSpan.ToString("mm':'ss");
             }));
         }
-       
+
+        private void _controller_TestStartedNotification(object sender, TribometerAxis e)
+        {
+            if (e == TribometerAxis.Horizontal)
+            {
+                startTime = DateTime.Now;
+                testTimer = new Timer(TestTimerTick);
+                testTimer.Change(0, 1000);
+            }
+        }
 
         // Bindings
-        
+
         public DelegateCommand StartCommand { get; set; }
         public DelegateCommand EndCommand { get; set; }
         public DelegateCommand DecreaseLoadCommand { get; set; }
@@ -179,11 +180,11 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public DelegateCommand LoadCommand { get; set; }
         public DelegateCommand UnloadCommand { get; set; }
 
-        private bool _isReciprocating;
-        public bool IsReciprocating
+        private bool _showTestInfo;
+        public bool ShowTestInfo
         {
-            get => _isReciprocating;
-            set => SetProperty(ref _isReciprocating, value);
+            get => _showTestInfo;
+            set => SetProperty(ref _showTestInfo, value);
         }
 
         private string _testName;
@@ -204,7 +205,10 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public NormalLoadingProfile SelectedLoadingProfile
         {
             get { return _selectedLoadingProfile; }
-            set { SetProperty(ref _selectedLoadingProfile, value); }
+            set { 
+                SetProperty(ref _selectedLoadingProfile, value);
+                _settings.horizTestNormalLoadingProfile = value;
+            }
         }
 
         private ObservableCollection<NormalLoadingProfile> _loadingProfilesAvailable;

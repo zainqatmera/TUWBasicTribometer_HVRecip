@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
+using static ImTools.ImMap;
 
 namespace TUWBasicTribometer_HVRecip.Controllers
 {
@@ -42,6 +43,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public event EventHandler<OperatingState> StateChanged;
         public event EventHandler<string> InfoLogIssued;
         public event EventHandler<int> TestCycleCountUpdated;
+        public event EventHandler<TribometerAxis> TestStartedNotification;  // Test started with the specified axis reciprocating
 
 
         // Constructor
@@ -108,6 +110,13 @@ namespace TUWBasicTribometer_HVRecip.Controllers
                 case MessageCode.CyclePointMark:
                     ProcessCyclePointMark(e);
                     break;
+                case MessageCode.StartHorizontalReciprocation:
+                    TestStartedNotification?.Invoke(this, TribometerAxis.Horizontal);
+                    break;
+                case MessageCode.StartVerticalReciprocation:
+                    TestStartedNotification?.Invoke(this, TribometerAxis.Vertical);
+                    break;
+
                 default:
                     {
                         string data = "";
@@ -125,7 +134,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         private void ProcessCyclePointMark(byte[] e)
         {
-            if (e[1] == 5)
+            if (e[1] == 1)
             {
                 currentTestCycleCount++;
                 TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
@@ -218,6 +227,24 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             SendCommand(MessageCode.MoveRel, buffer);
         }
 
+        internal void AdjustLoadToPosition(int value)
+        {
+            byte[] bytes = new byte[4];
+            MemoryStream ms = new MemoryStream(bytes);
+            BinaryWriter bw = new BinaryWriter(ms);
+            bw.Write(value);
+            SendCommand(MessageCode.AdjustLoadMoveVerticalTo, bytes);
+        }
+
+        internal void AdjustLoad(int stepsToMove)
+        {
+            byte[] bytes = new byte[4];
+            MemoryStream ms = new MemoryStream(bytes);
+            BinaryWriter bw = new BinaryWriter(ms);
+            bw.Write(stepsToMove);
+            SendCommand(MessageCode.AdjustLoadMoveVertical, bytes);
+        }
+
         // Outgoing Messages - settings
 
         public void SetMotorControlParams(float hSpeed, float hAccel, float vSpeed, float vAccel)
@@ -252,7 +279,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         }
 
-        void SetMotorControlParamsManual()
+        public void SetMotorControlParamsManual()
         {
             SetMotorControlParams(_settings.moveMaxSpeedH, _settings.moveAccelH, _settings.moveMaxSpeedV, _settings.moveAccelV);
         }
@@ -292,7 +319,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             currentTestCycleCount = 0;
             TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
 
-            byte[] buffer = new byte[20];
+            byte[] buffer = new byte[25];
             MemoryStream ms = new MemoryStream(buffer);
             BinaryWriter bw = new BinaryWriter(ms);
             bw.Write(_settings.stepPosHLeft.Value);
@@ -312,5 +339,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         {
             SendCommand(MessageCode.EndTest);
         }
+
+
     }
 }

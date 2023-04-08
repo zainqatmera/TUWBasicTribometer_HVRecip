@@ -30,7 +30,9 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
 
             _controller.TestCycleCountUpdated += _controller_TestCycleCountUpdated;
             _controller.StateChanged += _controller_StateChanged;
+            _controller.TestStartedNotification += _controller_TestStartedNotification;
 
+            SavePath = _settings.SaveFilePathVertTests;
             IsFixedNumberOfCycles = _settings.vertTestStopAtNumberOfCycles;
             IsManualEnd = !IsFixedNumberOfCycles;
             TargetNumberOfCycles = _settings.vertTestTargetNumberOfCycles;
@@ -126,17 +128,26 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             }));
         }
 
+        private void _controller_TestStartedNotification(object sender, TribometerAxis e)
+        {
+            if (e == TribometerAxis.Vertical)
+            {
+                startTime = DateTime.Now;
+                testTimer = new Timer(TestTimerTick);
+                testTimer.Change(0, 1000);
+            }
+        }
 
         // Bindings
 
         public DelegateCommand StartCommand { get; set; }
         public DelegateCommand EndCommand { get; set; }
 
-        private bool _isReciprocating;
+        private bool _isInTest;
         public bool IsInTest
         {
-            get => _isReciprocating; 
-            set => SetProperty(ref _isReciprocating, value);
+            get => _isInTest; 
+            set => SetProperty(ref _isInTest, value);
         }
 
         private string _testName;

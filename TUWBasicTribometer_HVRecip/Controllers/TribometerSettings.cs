@@ -46,15 +46,16 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public int ComPortTribometerBaudRate = 115200;
 
         // User-settings 
-        public int? stepPosHCentre = null;     // Steps from limit switch datum to "centre"
-        public int? stepPosHLeft = null;     // Steps from limit switch datum to "left"
-        public int? stepPosHRight = null;     // Steps from limit switch datum to "right"
+        public int? stepPosHCentre = 0;     // Steps from limit switch datum to "centre"
+        public int? stepPosHLeft = -500;     // Steps from limit switch datum to "left"
+        public int? stepPosHRight = 500;     // Steps from limit switch datum to "right"
 
-        public int? stepPosVRaised = null;
-        public int? stepPosVUnloaded = null;
-        public int? stepPosVLoaded = null;
+        public int? stepPosVRaised = 0;
+        public int? stepPosVUnloaded = 1000;
+        public int? stepPosVLoaded = 1100;
 
-        public string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public string SaveFilePathHorizTests = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public string SaveFilePathVertTests = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         // Movement steps for manual contrl
         public int moveStepsHPrecisionLow = 1;
@@ -102,6 +103,6 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public int horizTestPauseTime = 0;
         public int horizTestTargetNumberOfCycles = 10;
         public bool horizTestStopAtNumberOfCycles = true;
-        public NormalLoadingProfile horizTestNormalLoadingProfile = NormalLoadingProfile.ManualControl;;
+        public NormalLoadingProfile horizTestNormalLoadingProfile = NormalLoadingProfile.ManualControl;
     }
 }
