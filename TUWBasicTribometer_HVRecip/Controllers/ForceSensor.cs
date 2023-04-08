@@ -28,6 +28,8 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         private double[] ForceTorqueValuesRaw = new double[6];
         private double[] ForceTorqueZeroNegativeOffsets = new double[6];        // The negative of the offsets so use addition for actual value from raw
 
+        private Random random = new Random();
+
         public ForceSensor()
         {
             for (int i = 0; i < 6; i++) ForceTorqueZeroNegativeOffsets[i] = 0;
@@ -106,5 +108,26 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         {
             samplingTimer.Dispose();
         }
+
+        // This is used to test file writing by generating random data
+        // Do not use while connected to actual sensor!
+        internal void Fake()
+        {
+            for (int i = 0; i < 6; i++) { ForceTorqueValuesRaw[i] = 0; ForceTorqueZeroNegativeOffsets[i] = 0; }
+            samplingTimer = new Timer(SamplingTimerTickFake);
+            samplingTimer.Change(Settings.ForceSensorMeasureInterval_ms, Settings.ForceSensorMeasureInterval_ms);
+        }
+
+        private void SamplingTimerTickFake(object state)
+        {
+            ForceSensorEventArgs e = new ForceSensorEventArgs();
+            for (int i = 0; i < 6; i++)
+            {
+                ForceTorqueValuesRaw[i] += random.NextDouble() - 0.5;
+                e.FTValues[i] = ForceTorqueValuesRaw[i] + ForceTorqueZeroNegativeOffsets[i];
+            }
+            ForceSensorDataAvailable?.Invoke(this, e);
+        }
+
     }
 }

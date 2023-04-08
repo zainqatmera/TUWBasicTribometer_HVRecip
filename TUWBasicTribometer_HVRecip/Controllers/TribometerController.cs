@@ -1,10 +1,12 @@
-﻿using System;
+﻿using NationalInstruments.DataInfrastructure;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Markup;
 using static ImTools.ImMap;
 
@@ -21,6 +23,11 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         private int currentTestCycleCount = 0;
 
+        ResultsFileWriter _resultsFileWriter = null;
+        byte mostRecentTestMarker = 0;  // This is set when a test marker is recieved and reset to zero after writing to file
+        DateTime testStartTime;
+
+        ForceSensor _forceSensor;
         // Properties
 
         public int PositionH => currentHPos;
@@ -134,6 +141,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         private void ProcessCyclePointMark(byte[] e)
         {
+            mostRecentTestMarker = e[1];
             if (e[1] == 1)
             {
                 currentTestCycleCount++;
@@ -170,6 +178,15 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             BinaryReader br = new BinaryReader(ms);
             br.ReadByte();  // Message code
             State = (OperatingState)br.ReadByte();
+
+            if (State == OperatingState.Idle)
+            {
+                if (_resultsFileWriter != null)
+                {
+                    _resultsFileWriter.Close();
+                    _resultsFileWriter = null;
+                }
+            }
         }
 
 
@@ -296,8 +313,12 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         // Outgoing messages - tests
 
-        internal void StartVertRecipTest()
+        internal void StartVertRecipTest(string testName = "")
         {
+            if (String.IsNullOrEmpty(testName)) 
+                testName = "Vertical Test";
+            testName = Helpers.MakeUniqueFilePath(_settings.SaveFilePathVertTests, testName);
+
             currentTestCycleCount = 0;
             TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
 
@@ -310,12 +331,24 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             bw.Write(_settings.vertTestPauseTimeLoaded);
             bw.Write(_settings.vertTestStopAtNumberOfCycles ? _settings.vertTestTargetNumberOfCycles : -1);
 
+            _resultsFileWriter = new ResultsFileWriter(testName);
+            _resultsFileWriter.PrepareFile();
+            mostRecentTestMarker = 0;
+            testStartTime = DateTime.Now;
+
             SetMotorControlParamsVertTest();
             SendCommand(MessageCode.StartVerticalReciprocation, buffer);
+
+          //  Console.WriteLine(testName);
         }
 
-        internal void StartHorizRecipTest()
+        internal void StartHorizRecipTest(string testName = "")
         {
+            if (String.IsNullOrEmpty(testName)) 
+                testName = "Horizontal Test";
+
+            testName = Helpers.MakeUniqueFilePath(_settings.SaveFilePathHorizTests, testName);
+
             currentTestCycleCount = 0;
             TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
 
@@ -330,9 +363,15 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             bw.Write(_settings.stepPosVUnloaded.Value);
             bw.Write(_settings.stepPosVLoaded.Value);
 
+            _resultsFileWriter = new ResultsFileWriter(testName);
+            _resultsFileWriter.PrepareFile();
+            mostRecentTestMarker = 0;
+            testStartTime = DateTime.Now;
+
             SetMotorControlParamsHorizTest();
             SendCommand(MessageCode.StartHorizontalReciprocation, buffer);
 
+           // Console.WriteLine(testName);
         }
 
         internal void EndTest()
@@ -340,6 +379,25 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             SendCommand(MessageCode.EndTest);
         }
 
+        internal void SetForceSensor(ForceSensor forceSensor)
+        {
+            if (_forceSensor != null)
+            {
+                throw new Exception("Cannot set forces sensor twice");
+            }
 
+            _forceSensor = forceSensor;
+            _forceSensor.ForceSensorDataAvailable += _forceSensor_ForceSensorDataAvailable;
+        }
+
+        private void _forceSensor_ForceSensorDataAvailable(object sender, ForceSensorEventArgs e)
+        {
+            if (_resultsFileWriter != null)
+            {
+                var timestamp = (DateTime.Now - testStartTime).TotalSeconds;
+                _resultsFileWriter.WriteRow(timestamp, e.FTValues, mostRecentTestMarker);
+                mostRecentTestMarker = 0;
+            }
+        }
     }
 }

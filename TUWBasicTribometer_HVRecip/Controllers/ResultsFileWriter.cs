@@ -10,14 +10,12 @@ namespace TUWBasicTribometer_HVRecip.Controllers
     internal class ResultsFileWriter
     {
         private readonly string _filename;
-        private readonly TribometerController _controller;
 
         StreamWriter _streamWriter;
 
-        public ResultsFileWriter(string filename, TribometerController controller) 
+        public ResultsFileWriter(string filename) 
         {
             this._filename = filename;
-            _controller = controller;
         }
 
         public bool PrepareFile(string header = "")

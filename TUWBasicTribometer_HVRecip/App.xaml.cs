@@ -48,7 +48,6 @@ namespace TUWBasicTribometer_HVRecip
 
         protected override Window CreateShell()
         {
-            //return Container.Resolve<SerialMonitorWindow>();
             return Container.Resolve<MainWindow>();
         }
 
@@ -75,26 +74,18 @@ namespace TUWBasicTribometer_HVRecip
             controller._settings = settings;
             forceSensor.Settings = settings;
 
+            // This can be used to test the file writing without having the sensor connected
+            //forceSensor.Fake();
 
-            /*            regionManager.RequestNavigate(RegionName.StatusTowerRegion,
-                            NavigationUri.StatusTowerView);
+            controller.SetForceSensor(forceSensor);
 
-                        regionManager.RequestNavigate(RegionName.MainTabRegion,
-                     NavigationUri.DevelopmentTabView);
-                        regionManager.RequestNavigate(RegionName.MainTabRegion, NavigationUri.ManualMoveTabView);
-
-                        var tabRegion = regionManager.Regions[RegionName.MainTabRegion];
-                        tabRegion.Activate(tabRegion.Views.First());
-
-                        var dialogService = Container.Resolve<IDialogService>();
-                        dialogService.Show(NavigationUri.DialogRunningLog);*/
-
-/*            var spm = Container.Resolve<SerialPortManager>();
-            spm.Connect(TribometerSettings.Instance.ComPortTribometer, TribometerSettings.Instance.ComPortTribometerBaudRate);
-*/
             base.OnInitialized();
         }
 
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+        }
 
     }
 }

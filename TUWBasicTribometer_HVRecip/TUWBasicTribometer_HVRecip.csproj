@@ -98,6 +98,7 @@
     <Compile Include="Controllers\Enums.cs" />
     <Compile Include="Controllers\ForceSensor.cs" />
     <Compile Include="Controllers\ForceSensorEventArgs.cs" />
+    <Compile Include="Controllers\Helpers.cs" />
     <Compile Include="Controllers\MessageId.cs" />
     <Compile Include="Controllers\ResultsFileWriter.cs" />
     <Compile Include="Controllers\SerialPortManager.cs" />

@@ -70,7 +70,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set
             {
                 SetProperty(ref _maxSpeedH, value);
-                _settings.vertTestMaxSpeedH = value;
+                _settings.horizTestMaxSpeedH = value;
             }
         }
 
@@ -81,7 +81,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set
             {
                 SetProperty(ref _accelH, value);
-                _settings.vertTestAccelH = value;
+                _settings.horizTestAccelH = value;
             }
         }
 
@@ -92,7 +92,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set
             {
                 SetProperty(ref _maxSpeedV, value);
-                _settings.vertTestMaxSpeedV = value;
+                _settings.horizTestMaxSpeedV = value;
             }
         }
 
@@ -103,7 +103,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set
             {
                 SetProperty(ref _accelV, value);
-                _settings.vertTestAccelV = value;
+                _settings.horizTestAccelV = value;
             }
         }
 
@@ -111,7 +111,10 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public int PauseTime
         {
             get { return _pauseTime; }
-            set { SetProperty(ref _pauseTime, value); }
+            set { 
+                SetProperty(ref _pauseTime, value); 
+                _settings.horizTestPauseTime = value;
+            }
         }
     }
 }

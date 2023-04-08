@@ -101,7 +101,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 return;
             }
 
-            _controller.StartHorizRecipTest();
+            _controller.StartHorizRecipTest(TestName);
         }
 
         private void EndTest()

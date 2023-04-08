@@ -6,10 +6,20 @@
         xmlns:local="clr-namespace:TUWBasicTribometer_HVRecip.Views"   
         xmlns:vms="clr-namespace:TUWBasicTribometer_HVRecip.ViewModels"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+
         d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel}"
         mc:Ignorable="d"
              Title="TUW Basic Tribometer - Horizontal/Vertical Reciprocating Controller" Height="600" Width="800">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing" >
+            <prism:InvokeCommandAction Command="{Binding ShutdownCommand}"
+                                               AutoEnable="true" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
+
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="621*"/>

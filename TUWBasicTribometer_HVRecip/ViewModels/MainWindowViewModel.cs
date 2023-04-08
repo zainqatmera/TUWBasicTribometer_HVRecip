@@ -18,6 +18,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         private readonly IContainer container;
         private readonly IRegionManager regionManager;
         private readonly TribometerController tribometerController;
+        private readonly TribometerSettings _settings;
 
         public MainWindowViewModel(IContainer container, IRegionManager regionManager )
         {
@@ -25,6 +26,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             this.regionManager = regionManager;
 
             tribometerController = container.Resolve<TribometerController>();
+            _settings = container.Resolve<TribometerSettings>();
 
             SetupCommand = new DelegateCommand(NavigateToSetup);
             ManualCommand = new DelegateCommand(NavigateToManual);
@@ -33,6 +35,12 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             SettingsCommand = new DelegateCommand(NavigateToSettings);
             StopCommand = new DelegateCommand(StopTribometer);
             RaiseCommand = new DelegateCommand(RaiseTribometer);
+            ShutdownCommand = new DelegateCommand(Shutdown);
+        }
+
+        private void Shutdown()
+        {
+            _settings.SaveSettings();
         }
 
         private void NavigateToSetup()
@@ -95,6 +103,8 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public DelegateCommand SettingsCommand { get; private set; }
         public DelegateCommand StopCommand { get; private set; }
         public DelegateCommand RaiseCommand { get; private set; }
+
+        public DelegateCommand ShutdownCommand { get; private set; }
 
         private FontWeight _setupWeight = FontWeights.Normal;
         public FontWeight SetupWeight

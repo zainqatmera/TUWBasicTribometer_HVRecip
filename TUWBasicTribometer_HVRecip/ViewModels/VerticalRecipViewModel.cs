@@ -63,7 +63,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 return;
             }
 
-            _controller.StartVertRecipTest();
+            _controller.StartVertRecipTest(TestName);
         }
 
         private void EndTest()
@@ -96,7 +96,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         private void HandleEndOfTest()
         {
             testTimer.Dispose();
-            MessageBox.Show("End of test");
+            MessageBox.Show("End of test");            
         }
 
         private void _controller_TestCycleCountUpdated(object sender, int e)

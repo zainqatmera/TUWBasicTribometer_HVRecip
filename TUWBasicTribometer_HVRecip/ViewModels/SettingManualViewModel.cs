@@ -92,7 +92,7 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set
             {
                 SetProperty(ref _stepsPrecisionSmallV, value);
-                _settings.moveStepsHPrecisionLow = value;
+                _settings.moveStepsVPrecisionLow = value;
             }
         }
 
