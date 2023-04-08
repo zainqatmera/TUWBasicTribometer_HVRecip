@@ -21,6 +21,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -96,7 +97,6 @@
             <TextBox Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MaxSpeedH}" />
             <TextBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding AccelH}" />
 
-            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Content="Update now" Command="{Binding UpdateHorizontalSettingsCommand}" HorizontalAlignment="Center" Margin="8" />
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center">
@@ -116,9 +116,9 @@
             <TextBox Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MaxSpeedV}" />
             <TextBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding AccelV}" />
 
-            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Content="Update now" Command="{Binding UpdateVerticalSettingsCommand}" HorizontalAlignment="Center" Margin="8" />
-
         </Grid>
+
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Content="Update now" Command="{Binding UpdateManualSettingsCommand}" HorizontalAlignment="Center" Margin="8" />
 
     </Grid>
 </UserControl>

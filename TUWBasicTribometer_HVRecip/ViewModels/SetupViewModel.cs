@@ -11,7 +11,7 @@ using TUWBasicTribometer_HVRecip.Controllers;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    internal class SetupViewModel : BindableBase
+    internal class SetupViewModel : ViewModelBase
     {
         private readonly TribometerController _controller;
         private readonly ForceSensor _forceSensor;

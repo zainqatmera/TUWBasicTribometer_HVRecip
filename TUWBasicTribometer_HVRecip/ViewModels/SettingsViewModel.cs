@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    public class SettingsViewModel : BindableBase, INavigationAware
+    public class SettingsViewModel : ViewModelBase
     {
         private readonly IRegionManager _regionManager;
 
@@ -17,22 +17,6 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             _regionManager = regionManager;
         }
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            _regionManager.RequestNavigate(PrismRegion.SettingsTabControlRegion, PrismNavigationUri.ManualSettings);
-            _regionManager.RequestNavigate(PrismRegion.SettingsTabControlRegion, PrismNavigationUri.VertRecipSettings);
-
-            var tabRegion = _regionManager.Regions[PrismRegion.SettingsTabControlRegion];
-            tabRegion.Activate(tabRegion.Views.First());
-        }
     }
 }

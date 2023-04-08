@@ -8,62 +8,108 @@
              d:DataContext="{d:DesignInstance Type=vms:HorizontalRecipViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal">
-        
-        <GroupBox Header="Automatic">
-            <StackPanel>
-                <Button Content="Start" Command="{Binding StartCommand}" />
-                <Button Content="Stop" Command="{Binding StopCommand}" />
-                <CheckBox Content="Continuous" IsChecked="{Binding IsContinuous}" IsEnabled="{Binding AllowChanges}" />
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Cycles: " />
-                    <TextBox Text="{Binding NumberOfCycles}" IsEnabled="{Binding AllowChanges}" Width="70"/>
-                </StackPanel>
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </Grid.Resources>
 
-                <ComboBox ItemsSource="{Binding RecipRangeOptions}" SelectedItem="{Binding SelectedRecipRangeOption}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Max Speed: " />
-                    <TextBox Text="{Binding MaxSpeed}" IsEnabled="{Binding AllowChanges}" Width="70"/>
-                </StackPanel>
+        <TextBlock Text="Horizontal Reciprocating Test" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="16"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Hand Side -->
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Use manual section to set Unloaded and Loaded positions" TextWrapping="Wrap" Width="200" Margin="0,8" />
+                <TextBlock Text="Use settings section to set speed and pause times" TextWrapping="Wrap" Width="200" Margin="0,8"/>
+                <Rectangle Height="20" />
+
+                <TextBlock Text="Test name: (filename)" />
+                <TextBox Text="{Binding TestName}" />
+                <Rectangle Height="10" />
+                <TextBlock Text="{Binding SavePath, FallbackValue='The Directory'}" FontSize="8" TextWrapping="Wrap"/>
+                <Button Content="Change path" Command="{Binding ChangeDirCommand}" HorizontalAlignment="Left"/>
+                
+                <Button Content="^  Decrease Load" Command="{Binding DecreaseLoadCommand}" Height="30" Visibility="{Binding ShowLoadControls, Converter={StaticResource BoolToVis}}" Margin="0,30,0,5"/>
+                <Button Content="v  Increase Load" Command="{Binding IncreaseLoadCommand}" Height="30" Visibility="{Binding ShowLoadControls, Converter={StaticResource BoolToVis}}"/>
+                <Grid Margin="0,20,0,0" Visibility="{Binding}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Unload" Command="{Binding UnloadCommand}" />
+                    <Button Grid.Column="2" Content="Load" Command="{Binding LoadCommand}" />
+                </Grid>
+
 
             </StackPanel>
-        </GroupBox>
 
-        <GroupBox Header="Vertical/Load">
-            <StackPanel>
-                <Button Content="^^" Command="{Binding MoveManualCommand}" CommandParameter="V2" />
-                <Button Content="^" Command="{Binding MoveManualCommand}" CommandParameter="V1" />
-                <Button Content="v" Command="{Binding MoveManualCommand}" CommandParameter="V-1" />
-                <Button Content="vv" Command="{Binding MoveManualCommand}" CommandParameter="V-2" />
-                <Button Content="Unload" Command="{Binding UnloadCommand}" />
-                <Button Content="Load" Command="{Binding LoadNormalCommand}" />
-                <Button Content="Set Loaded Pos" Command="{Binding SetLoadedPosition}" />
-                <Button Content="Seek Load" Command="{Binding SeekLoadCommand}" />
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Target load: " />
-                    <TextBox Text="{Binding TargetLoad}" IsEnabled="{Binding AllowChanges}" Width="70"/>
+            <!-- Right Hand Side -->
+            <Grid Grid.Column="3" >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ShowTestInfo, Converter={StaticResource BoolToVis}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Number of cycles:" Margin="4" FontSize="24" />
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding NumberOfCyclesCompleted, FallbackValue=0}" Margin="4" FontSize="24"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Time taken:" Margin="4" FontSize="24" />
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding TimeElapsed, FallbackValue=0}" Margin="4" FontSize="24"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Normal Force:" Margin="4" FontSize="24" />
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding NormalForce, FallbackValue=0}" Margin="4" FontSize="24"/>
+                </Grid>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" >
+                    <StackPanel Orientation="Vertical" >
+                        <RadioButton Content="Stop manually" IsChecked="{Binding IsManualEnd}" GroupName="HorizRecipStopCycles" />
+                        <StackPanel Orientation="Horizontal" >
+                            <RadioButton Content="Fixed number of cycles" IsChecked="{Binding IsFixedNumberOfCycles}" Margin="0,10" GroupName="HorizRecipStopCycles"/>
+                            <TextBox Text="{Binding TargetNumberOfCycles}" Width="100" IsEnabled="{Binding IsFixedNumberOfCycles}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Rectangle Height="10" />
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="Loading Profile:" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding LoadingProfilesAvailable}" SelectedItem="{Binding SelectedLoadingProfile}" VerticalAlignment="Center" Width="160" Height="18"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Rectangle Height="20" />
+                    <StackPanel Orientation="Horizontal" >
+                        <Button Content="Start Test" Command="{Binding StartCommand}" Margin="8" Width="100" Height="30" />
+                        <Button Content="End" Command="{Binding EndCommand}" Margin="8" Width="100" Height="30"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
 
-        <GroupBox Header="Horizontal">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="&lt;&lt;" Command="{Binding MoveManualCommand}" CommandParameter="H-2" />
-                    <Button Content="&lt;" Command="{Binding MoveManualCommand}"  CommandParameter="H-1" />
-                    <Button Content="&gt;" Command="{Binding MoveManualCommand}"  CommandParameter="H1" />
-                    <Button Content="&gt;&gt;" Command="{Binding MoveManualCommand}" CommandParameter="H2" />
-                </StackPanel>
-                <Button Content="Move To Left" Command="{Binding MoveToCommand}" CommandParameter="Left" />
-                <Button Content="Move To Centre" Command="{Binding MoveToCommand}" CommandParameter="Centre" />
-                <Button Content="Move To Right" Command="{Binding MoveToCommand}" CommandParameter="Right"/>
 
-                <Button Content="Set Centre" Command="{Binding SetPoint}" CommandParameter="Centre" />
-                <Button Content="Set Left" Command="{Binding SetPoint}" CommandParameter="Left" />
-                <Button Content="Set Right" Command="{Binding SetPoint}" CommandParameter="Right" />
-            </StackPanel>
-        </GroupBox>
 
-    </StackPanel>
+
+            </Grid>
+
+        </Grid>
+
+
+    </Grid>
+
 </UserControl>

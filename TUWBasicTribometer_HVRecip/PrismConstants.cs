@@ -26,6 +26,7 @@ namespace TUWBasicTribometer_HVRecip
 
         public const string ManualSettings = nameof(ManualSettings);
         public const string VertRecipSettings = nameof(VertRecipSettings);
+        public const string HorizRecipSettings = nameof(HorizRecipSettings);
     }
 
 }

@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    internal class StatusViewModel : BindableBase
+    internal class StatusViewModel : ViewModelBase
     {
         public StatusViewModel(IContainer container) 
         { 
@@ -21,11 +21,12 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             forceSensor.ForceSensorError += ForceSensor_ForceSensorError;
             controller.StateChanged += Controller_StateChanged;
             controller.PositionUpdated += Controller_PositionUpdated;
+
+            IsForceSensorDisconnected = true;
         }
 
         private void Controller_PositionUpdated(object sender, TribometerPositionEventArgs e)
         {
-            // TODO: Hide when position is null (moving or not homed)
             HPos_step = e.HorizontalStepPosition ?? 0;
             VPos_step = e.VerticalStepPosition ?? 0;
         }
@@ -38,10 +39,17 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         private void ForceSensor_ForceSensorError(object sender, EventArgs e)
         {
             MessageBox.Show("Force sensor error");
+            IsForceSensorDisconnected = true;
+            ShowForceSensorData = false;
         }
 
         private void ForceSensor_ForceSensorDataAvailable(object sender, ForceSensorEventArgs e)
         {
+            if (_isForceSensorDisconnected)
+            {
+                IsForceSensorDisconnected = false;
+            }
+
             Fx = e.FTValues[0].ToString("F2");
             Fy = e.FTValues[1].ToString("F2");
             Fz = e.FTValues[2].ToString("F2");
@@ -141,5 +149,11 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set { SetProperty(ref _isForceSensorDisconnected, value); }
         }
 
+        private bool _showForceSensorData;
+        public bool ShowForceSensorData
+        {
+            get { return _showForceSensorData; }
+            set { SetProperty(ref _showForceSensorData, value); }
+        }
     }
 }

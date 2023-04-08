@@ -1,7 +1,6 @@
 ﻿using DryIoc;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,24 +11,23 @@ using TUWBasicTribometer_HVRecip.Controllers;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    public class SettingsVertRecipViewModel : ViewModelBase
+    internal class SettingsHorizRecipViewModel : ViewModelBase
     {
         TribometerSettings _settings;
         TribometerController _controller;
 
-        public string Title => "Vertical Test";
+        public string Title => "Horizontal Test";
 
-        public SettingsVertRecipViewModel(IContainer container) 
+        public SettingsHorizRecipViewModel(IContainer container)
         {
             _settings = container.Resolve<TribometerSettings>();
             _controller = container.Resolve<TribometerController>();
 
-            MaxSpeedH = _settings.vertTestMaxSpeedH;
-            AccelH = _settings.vertTestAccelH;
-            MaxSpeedV = _settings.vertTestMaxSpeedV;
-            AccelV = _settings.vertTestAccelV;
-            PauseTimeUnloaded = _settings.vertTestPauseTimeUnloaded;
-            PauseTimeLoaded = _settings.vertTestPauseTimeLoaded;
+            MaxSpeedH = _settings.horizTestMaxSpeedH;
+            AccelH = _settings.horizTestAccelH;
+            MaxSpeedV = _settings.horizTestMaxSpeedV;
+            AccelV = _settings.horizTestAccelV;
+            PauseTime = _settings.horizTestPauseTime;
 
             _controller.StateChanged += _controller_StateChanged;
 
@@ -43,31 +41,25 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
 
         private bool CanUploadSettingsImmediate()
         {
-            return _controller.State == OperatingState.RecipVertical;
+            return _controller.State == OperatingState.RecipHorizontal;
         }
 
         private void UploadSettingsImmediate()
         {
-            if (_controller.State == OperatingState.RecipVertical)
+            if (_controller.State == OperatingState.RecipHorizontal)
             {
                 _controller.SetMotorControlParamsVertTest();
                 byte[] buffer = new byte[5];
                 MemoryStream ms = new MemoryStream(buffer);
                 BinaryWriter bw = new BinaryWriter(ms);
 
-                bw.Write((byte)TestSettingsParameter.PauseTimeUnloaded);
-                bw.Write(PauseTimeUnloaded);
-                _controller.SendCommand(MessageCode.SetTestSettingsParam, buffer);
-
-                ms.Position = 0;
-                bw.Write((byte)TestSettingsParameter.PauseTimeLoaded);
-                bw.Write(PauseTimeLoaded);
+                bw.Write((byte)TestSettingsParameter.PauseTimeHorizontalEnd);
+                bw.Write(PauseTime);
                 _controller.SendCommand(MessageCode.SetTestSettingsParam, buffer);
 
             }
         }
 
-        // Bindings
 
         public DelegateCommand UploadSettingsImmediateCommand { get; set; }
 
@@ -75,8 +67,9 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public float MaxSpeedH
         {
             get { return _maxSpeedH; }
-            set {
-                SetProperty(ref _maxSpeedH, value); 
+            set
+            {
+                SetProperty(ref _maxSpeedH, value);
                 _settings.vertTestMaxSpeedH = value;
             }
         }
@@ -114,26 +107,11 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             }
         }
 
-        private int _pauseTimeUnloaded;
-        public int PauseTimeUnloaded
+        private int _pauseTime;
+        public int PauseTime
         {
-            get { return _pauseTimeUnloaded; }
-            set { 
-                SetProperty(ref _pauseTimeUnloaded, value); 
-                _settings.vertTestPauseTimeUnloaded = value;
-            }
+            get { return _pauseTime; }
+            set { SetProperty(ref _pauseTime, value); }
         }
-
-        private int _pauseTimeLoaded;
-        public int PauseTimeLoaded
-        {
-            get { return _pauseTimeLoaded; }
-            set
-            {
-                SetProperty(ref _pauseTimeLoaded, value);
-                _settings.vertTestPauseTimeLoaded = value;
-            }
-        }
-
     }
 }

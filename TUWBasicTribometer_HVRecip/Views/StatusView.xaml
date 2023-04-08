@@ -19,36 +19,38 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding CurrentOperatingState, FallbackValue='Not connected'}" />
+        <Label Grid.Row="0" Content="{Binding CurrentOperatingState, FallbackValue='Not connected'}" FontWeight="Bold" />
 
         <!-- Position H -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5*" />
-                <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="H:" />
-            <Label Grid.Column="1" Content="{Binding HPos_mm}" />
-            <Label Grid.Column="2" Content="{Binding HPos_step}" Foreground="Blue" />
+            <Label Grid.Column="1" Content="{Binding HPos_step}" />
+            <Label Grid.Column="2" Content="{Binding HPos_mm}" Foreground="Blue" />
         </Grid>
 
         <!-- Position V -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5*" />
-                <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="V:" />
-            <Label Grid.Column="1" Content="{Binding VPos_mm}" />
-            <Label Grid.Column="2" Content="{Binding VPos_step}" Foreground="Blue" />
+            <Label Grid.Column="1" Content="{Binding VPos_step}" />
+            <Label Grid.Column="2" Content="{Binding VPos_mm}" Foreground="Blue" />
         </Grid>
         
         <!-- Force sensor -->
         <Label Grid.Row="3" Content="Force sensor not connected" Visibility="{Binding IsForceSensorDisconnected, Converter={StaticResource BoolToVis}}" />
 
-        <Grid Grid.Row="4" >
+        <Grid Grid.Row="3" Visibility="{Binding ShowForceSensorData, Converter={StaticResource BoolToVis}}">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />

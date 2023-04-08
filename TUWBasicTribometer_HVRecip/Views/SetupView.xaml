@@ -12,32 +12,28 @@
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="20" />
                 <ColumnDefinition />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,8" Fill="DarkGray" Width="1"/>
+            <!--<Rectangle Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,8" Fill="DarkGray" Width="1"/>-->
 
-            <GroupBox Header="Tribometer" Grid.Column="0" >
-                <StackPanel >
-                    <Button Margin="8" Content="Connect" Command="{Binding ConnectTribometerCommand}" />
-                    <Button Margin="8" Content="Home" Command="{Binding HomeCommand}" />
-                    <Button Margin="8" Content="Clear" Command="{Binding ClearErrorsCommand}" />
-                </StackPanel>
-            </GroupBox>
+            <StackPanel>
+                <TextBlock Text="Tribometer" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="16,0,16,16" />
+                <Button Margin="8" Content="Connect" Command="{Binding ConnectTribometerCommand}" />
+                <Button Margin="8" Content="Home" Command="{Binding HomeCommand}" />
+                <Button Margin="8" Content="Reset Errors" Command="{Binding ClearErrorsCommand}" />
+            </StackPanel>
 
-            <GroupBox Header="Force Sensor" Grid.Column="2" >
-                <StackPanel Grid.Column="1" >
-                    <Button Margin="8" Content="Connect" Command="{Binding ConnectSensorCommand}" />
-                    <Button Margin="8" Content="Zero" Command="{Binding ZeroSensorCommand}" />
-                </StackPanel>
-            </GroupBox>
+            <StackPanel Grid.Column="2" >
+                <TextBlock Text="Force Sensor" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="16,0,16,16" />
+                <Button Margin="8" Content="Connect" Command="{Binding ConnectSensorCommand}" />
+                <Button Margin="8" Content="Zero" Command="{Binding ZeroSensorCommand}" />
+            </StackPanel>
 
-            <GroupBox Header="Settings" Grid.Column="4" >
-                <StackPanel Grid.Column="1" >
-                    <Button Margin="8" Content="Reload" Command="{Binding ReloadSettingsCommand}" />
-                </StackPanel>
-            </GroupBox>
+
 
         </Grid>
     </Grid>

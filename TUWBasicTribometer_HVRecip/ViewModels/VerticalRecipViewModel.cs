@@ -15,7 +15,7 @@ using TUWBasicTribometer_HVRecip.Properties;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    public class VerticalRecipViewModel : BindableBase
+    public class VerticalRecipViewModel : ViewModelBase
     {
         private readonly TribometerController _controller;
         private readonly TribometerSettings _settings;
@@ -29,9 +29,72 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             _settings = container.Resolve<TribometerSettings>();
 
             _controller.TestCycleCountUpdated += _controller_TestCycleCountUpdated;
+            _controller.StateChanged += _controller_StateChanged;
 
-            StartCommand = new DelegateCommand(StartTest);
-            EndCommand = new DelegateCommand(EndTest);
+            IsFixedNumberOfCycles = _settings.vertTestStopAtNumberOfCycles;
+            IsManualEnd = !IsFixedNumberOfCycles;
+            TargetNumberOfCycles = _settings.vertTestTargetNumberOfCycles;
+
+            IsInTest = false;
+
+            StartCommand = new DelegateCommand(StartTest, CanStartTest);
+            EndCommand = new DelegateCommand(EndTest, CanEndTest);
+        }
+
+        // Commands and CanExecutes
+
+        private bool CanStartTest()
+        {
+            return _controller.State == OperatingState.Idle;
+        }
+
+        private bool CanEndTest()
+        {
+            return _controller.State == OperatingState.RecipVertical;
+        }
+
+        private void StartTest()
+        {
+            if (!(_settings.stepPosVLoaded.HasValue && _settings.stepPosVUnloaded.HasValue))
+            {
+                MessageBox.Show("Define loaded and unloaded points first");
+                return;
+            }
+
+            _controller.StartVertRecipTest();
+        }
+
+        private void EndTest()
+        {
+            _controller.EndTest();
+        }
+
+
+        // Event Handling
+
+        private void _controller_StateChanged(object sender, OperatingState e)
+        {
+            if (e == OperatingState.RecipVertical)
+            {
+                IsInTest = true;
+            }
+            else
+            {
+                if (IsInTest)
+                {
+                    HandleEndOfTest();
+                }
+                IsInTest = false;
+            }
+
+            StartCommand?.RaiseCanExecuteChanged();
+            EndCommand?.RaiseCanExecuteChanged();
+        }
+
+        private void HandleEndOfTest()
+        {
+            testTimer.Dispose();
+            MessageBox.Show("End of test");
         }
 
         private void _controller_TestCycleCountUpdated(object sender, int e)
@@ -44,15 +107,11 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
 
             if (e == 0)
             {
-                StartTestTimer(); 
+                // Start Test Time at first mark
+                startTime = DateTime.Now;
+                testTimer = new Timer(TestTimerTick);
+                testTimer.Change(0, 1000);
             }
-        }
-
-        private void StartTestTimer()
-        {
-            startTime = DateTime.Now;
-            testTimer = new Timer(TestTimerTick);
-            testTimer.Change(0, 1000);
         }
 
         private void TestTimerTick(object state)
@@ -67,95 +126,41 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             }));
         }
 
-        private void StartTest()
-        {
-            if (!(_settings.stepPosVLoaded.HasValue && _settings.stepPosVUnloaded.HasValue))
-            {
-                MessageBox.Show("Define upper and lower points first");
-                return;
-            }
 
-            
-            _controller.StartVertRecipTest();
-        }
+        // Bindings
 
-        private void EndTest()
-        {
-            _controller.SendCommand(MessageCode.EndTest);
-        }
+        public DelegateCommand StartCommand { get; set; }
+        public DelegateCommand EndCommand { get; set; }
 
         private bool _isReciprocating;
-        public bool IsReciprocating
+        public bool IsInTest
         {
             get => _isReciprocating; 
             set => SetProperty(ref _isReciprocating, value);
         }
 
-
-        public VerticalRecipViewModel()
+        private string _testName;
+        public string TestName
         {
-            IsReciprocating = false;
-           
-            MoveToRaisedCommand = new DelegateCommand(MoveToRaised).ObservesCanExecute(() => !IsReciprocating && _settings.stepPosVRaised.HasValue);
-            MoveToUnloadedCommand = new DelegateCommand(MoveToUnloaded).ObservesCanExecute(() => !IsReciprocating && _settings.stepPosVUnloaded.HasValue);
-            MoveToLoadedCommand = new DelegateCommand(MoveToLoaded).ObservesCanExecute(() => !IsReciprocating && _settings.stepPosVLoaded.HasValue);
-            StartCommand = new DelegateCommand(StartRecip).ObservesCanExecute(() => !IsReciprocating 
-                                                    && _settings.stepPosVUnloaded.HasValue 
-                                                    && _settings.stepPosVLoaded.HasValue
-                                                    && _controller.State == OperatingState.Idle);
-            EndCommand = new DelegateCommand(EndRecip).ObservesCanExecute(() => IsReciprocating);
+            get { return _testName; }
+            set { SetProperty(ref _testName, value); }
         }
 
-        private void EndRecip()
+        private string _savePath;
+        public string SavePath
         {
-            IsReciprocating = false;           
+            get { return _savePath; }
+            set { SetProperty(ref _savePath, value); }
         }
 
-        private void StartRecip()
+        private bool _isManualEnd = true;
+        public bool IsManualEnd
         {
-            IsReciprocating = true;
-        }
-
-        private void MoveToRaised()
-        {
-            _controller.MoveTo(TribometerAxis.Vertical, _settings.stepPosVRaised.Value);
-        }
-
-        private void MoveToUnloaded()
-        {
-            _controller.MoveTo(TribometerAxis.Vertical, _settings.stepPosVUnloaded.Value);
-        }
-
-        private void MoveToLoaded()
-        {
-            _controller.MoveTo(TribometerAxis.Vertical, _settings.stepPosVLoaded.Value);
-        }
-
-
-        public DelegateCommand MoveToRaisedCommand { get; set; }
-        public DelegateCommand MoveToUnloadedCommand { get; set; }
-        public DelegateCommand MoveToLoadedCommand { get; set; }
-        public DelegateCommand StartCommand { get; set; }
-        public DelegateCommand EndCommand { get; set; }
-
-        private int _pauseTimeUnloaded;
-        public int PauseTimeUnloaded
-        {
-            get => _pauseTimeUnloaded;
+            get { return _isManualEnd; }
             set
             {
-                SetProperty(ref _pauseTimeUnloaded, value);
-                _settings.vertTestPauseTimeUnloaded = value;
-            }
-        }
-
-        private int _pauseTimeLoaded;
-        public int PauseTimeLoaded { 
-            get => _pauseTimeLoaded;
-            set
-            {
-                SetProperty(ref _pauseTimeLoaded, value);
-                _settings.vertTestPauseTimeLoaded = value;
+                SetProperty(ref _isManualEnd, value);
+                _settings.vertTestStopAtNumberOfCycles = !value;
             }
         }
 
@@ -164,8 +169,8 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         {
             get { return _isFixedNumberOfCycles; }
             set { 
-                SetProperty(ref _isFixedNumberOfCycles, value); 
-                _settings.vertTestNumberOfCycles = value ? TargetNumberOfCycles : -1;
+                SetProperty(ref _isFixedNumberOfCycles, value);
+                _settings.vertTestStopAtNumberOfCycles = value;
             }
         }
 
@@ -173,9 +178,10 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         public int TargetNumberOfCycles
         {
             get { return _targetNumberOfCycles; }
-            set { 
+            set {
+                if (value < 1) value = 1;
                 SetProperty(ref _targetNumberOfCycles, value);
-                _settings.vertTestNumberOfCycles = IsFixedNumberOfCycles ? value : -1;
+                _settings.vertTestTargetNumberOfCycles = value;
             }
         }
 

@@ -13,7 +13,7 @@ using TUWBasicTribometer_HVRecip.Controllers;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    internal class MainWindowViewModel : BindableBase
+    internal class MainWindowViewModel : ViewModelBase
     {
         private readonly IContainer container;
         private readonly IRegionManager regionManager;

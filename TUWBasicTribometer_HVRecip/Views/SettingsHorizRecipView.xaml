@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TUWBasicTribometer_HVRecip.Views.SettingsVertRecipView"
+﻿<UserControl x:Class="TUWBasicTribometer_HVRecip.Views.SettingsHorizRecipView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              xmlns:vms="clr-namespace:TUWBasicTribometer_HVRecip.ViewModels"
              xmlns:prism="http://prismlibrary.com/"
-             d:DataContext="{d:DesignInstance Type=vms:SettingsVertRecipViewModel}"
+             d:DataContext="{d:DesignInstance Type=vms:SettingsHorizRecipViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,7 +25,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Content="Vertical Reciprocating Test Settings" Grid.ColumnSpan="5" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Horizontal Reciprocating Test Settings" Grid.ColumnSpan="5" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold"/>
         <TextBlock Grid.ColumnSpan="5" HorizontalAlignment="Center" Grid.Row="1" Text="Settings will be applied to next test, or click Upload immediate to apply to a running test" FontSize="10" />
 
         <!-- Motor Settings -->
@@ -73,13 +73,12 @@
             </Grid.RowDefinitions>
 
             <Label Content="Pause times" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalContentAlignment="Center" />
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Unloaded (ms)" VerticalAlignment="Center" />
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Loaded (ms)" VerticalAlignment="Center" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PauseTimeUnloaded}" VerticalAlignment="Center" Margin="4" Width="100"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding PauseTimeLoaded}" VerticalAlignment="Center" Margin="4" Width="100" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Pause (ms)" VerticalAlignment="Center" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PauseTime}" VerticalAlignment="Center" Margin="4" Width="100"/>
         </Grid>
 
         <Button Grid.ColumnSpan="5" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="8" Padding="8,0" Content="Upload immediate" Command="{Binding UploadSettingsImmediateCommand}" />
 
     </Grid>
+
 </UserControl>

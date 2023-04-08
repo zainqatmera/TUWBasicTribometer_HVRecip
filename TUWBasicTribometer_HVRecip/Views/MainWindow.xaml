@@ -10,6 +10,7 @@
         mc:Ignorable="d"
              Title="TUW Basic Tribometer - Horizontal/Vertical Reciprocating Controller" Height="600" Width="800">
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="621*"/>
             <ColumnDefinition Width="4"/>
@@ -45,8 +46,21 @@
                 <Button Grid.Column="3" Content="Horizontal" Command="{Binding HorizRecipCommand}" Margin="4" FontWeight="{Binding HorizWeight}" />
                 <Button Grid.Column="4" Content="Settings" Command="{Binding SettingsCommand}" Margin="4" FontWeight="{Binding SettingsWeight}" />
 
-                <Button Grid.Column="6" Content="STOP" Command="{Binding StopCommand}" Margin="4" />
-                <Button Grid.Column="7" Content="RAISE" Command="{Binding RaiseCommand}" Margin="4" />
+                <Button Grid.Column="6" Content="STOP" Command="{Binding StopCommand}" Margin="4" Background="#FFDC9595" FontWeight="Bold" >
+                    <Button.Resources>
+                        <Style TargetType="Border" >
+                            <Setter Property="CornerRadius" Value="15"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Grid.Column="7" Content="RAISE" Command="{Binding RaiseCommand}" Margin="4" Background="#FFE2C9C9" >
+                    <Button.Resources>
+                        <Style TargetType="Border" >
+                        <Setter Property="CornerRadius" Value="15"/>
+                    </Style>
+                    </Button.Resources>
+                </Button>
             </Grid>
             
             <!-- Main content region -->

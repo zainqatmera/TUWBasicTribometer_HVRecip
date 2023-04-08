@@ -54,6 +54,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public int? stepPosVUnloaded = null;
         public int? stepPosVLoaded = null;
 
+        public string SaveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         // Movement steps for manual contrl
         public int moveStepsHPrecisionLow = 1;
@@ -65,7 +66,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public int moveStepsVNormalLow = 100;
         public int moveStepsVNormalHigh = 1000;
 
-        // Motor settings for maual control
+        // Motor settings for manual control
         public float moveMaxSpeedH = 1000;
         public float moveMaxSpeedV = 1000;
         public float moveAccelH = 1000;
@@ -77,6 +78,12 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public float vertTestAccelH = 1000;
         public float vertTestAccelV = 1000;
 
+        // Motor settings during a horizontal reciprocating test
+        public float horizTestMaxSpeedH = 1000;
+        public float horizTestMaxSpeedV = 1000;
+        public float horizTestAccelH = 1000;
+        public float horizTestAccelV = 1000;
+
         // Sensor
         public string CalibrationFile = @"C:\Users\Administrator\Desktop\Tribometer\FT36487.cal";
         public string DaqDevice = "dev1";
@@ -86,8 +93,15 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public int ForceSensorMeasureInterval_ms = 100;
 
         // Vertical Test conditions
-        internal int vertTestPauseTimeUnloaded;
-        internal int vertTestPauseTimeLoaded;
-        internal int vertTestNumberOfCycles;
+        public int vertTestPauseTimeUnloaded = 0;
+        public int vertTestPauseTimeLoaded = 0;
+        public int vertTestTargetNumberOfCycles = 10;
+        public bool vertTestStopAtNumberOfCycles = true;
+
+        // Horizontal Test conditions
+        public int horizTestPauseTime = 0;
+        public int horizTestTargetNumberOfCycles = 10;
+        public bool horizTestStopAtNumberOfCycles = true;
+        public NormalLoadingProfile horizTestNormalLoadingProfile = NormalLoadingProfile.ManualControl;;
     }
 }

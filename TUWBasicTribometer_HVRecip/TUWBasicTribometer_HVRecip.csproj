@@ -99,6 +99,7 @@
     <Compile Include="Controllers\ForceSensor.cs" />
     <Compile Include="Controllers\ForceSensorEventArgs.cs" />
     <Compile Include="Controllers\MessageId.cs" />
+    <Compile Include="Controllers\ResultsFileWriter.cs" />
     <Compile Include="Controllers\SerialPortManager.cs" />
     <Compile Include="Controllers\TribometerController.cs" />
     <Compile Include="Controllers\TribometerPositionEventArgs.cs" />
@@ -112,11 +113,13 @@
     <Compile Include="ViewModels\ManualViewModel.cs" />
     <Compile Include="ViewModels\SerialMonitorWindowViewModel.cs" />
     <Compile Include="ViewModels\SettingManualViewModel.cs" />
+    <Compile Include="ViewModels\SettingsHorizRecipViewModel.cs" />
     <Compile Include="ViewModels\SettingsVertRecipViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SetupViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
     <Compile Include="ViewModels\VerticalRecipViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\HorizontalRecipView.xaml.cs">
       <DependentUpon>HorizontalRecipView.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,9 @@
     </Compile>
     <Compile Include="Views\SettingManualView.xaml.cs">
       <DependentUpon>SettingManualView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsHorizRecipView.xaml.cs">
+      <DependentUpon>SettingsHorizRecipView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsVertRecipView.xaml.cs">
       <DependentUpon>SettingsVertRecipView.xaml</DependentUpon>
@@ -182,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingManualView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsHorizRecipView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

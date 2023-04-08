@@ -37,6 +37,7 @@ namespace TUWBasicTribometer_HVRecip
 
             containerRegistry.RegisterForNavigation<SettingManualView, SettingManualViewModel>(PrismNavigationUri.ManualSettings);
             containerRegistry.RegisterForNavigation<SettingsVertRecipView, SettingsVertRecipViewModel>(PrismNavigationUri.VertRecipSettings);
+            containerRegistry.RegisterForNavigation<SettingsHorizRecipView, SettingsHorizRecipViewModel>(PrismNavigationUri.HorizRecipSettings);
 
           //  containerRegistry.RegisterSingleton<SerialPortManager>();
             containerRegistry.RegisterSingleton<TribometerController>();
@@ -54,15 +55,24 @@ namespace TUWBasicTribometer_HVRecip
         protected override void OnInitialized()
         {
             var regionManager = Container.Resolve<IRegionManager>();
+            regionManager.RequestNavigate(PrismRegion.MainContentRegion, PrismNavigationUri.Settings);
             regionManager.RequestNavigate(PrismRegion.MainContentRegion, PrismNavigationUri.Setup);
             regionManager.RequestNavigate(PrismRegion.LogContentRegion, PrismNavigationUri.Log);
             regionManager.RequestNavigate(PrismRegion.StatusRegion, PrismNavigationUri.Status);
+
+            regionManager.RequestNavigate(PrismRegion.SettingsTabControlRegion, PrismNavigationUri.ManualSettings);
+            regionManager.RequestNavigate(PrismRegion.SettingsTabControlRegion, PrismNavigationUri.VertRecipSettings);
+            regionManager.RequestNavigate(PrismRegion.SettingsTabControlRegion, PrismNavigationUri.HorizRecipSettings);
+
+            var tabRegion = regionManager.Regions[PrismRegion.SettingsTabControlRegion];
+            tabRegion.Activate(tabRegion.Views.First());
+
 
             var settings = Container.Resolve<TribometerSettings>();
             var controller = Container.Resolve<TribometerController>();
             var forceSensor = Container.Resolve<ForceSensor>(); 
 
-            controller.Settings = settings;
+            controller._settings = settings;
             forceSensor.Settings = settings;
 
 

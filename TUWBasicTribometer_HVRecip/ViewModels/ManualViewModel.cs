@@ -11,7 +11,7 @@ using TUWBasicTribometer_HVRecip.Controllers;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    internal class ManualViewModel : BindableBase
+    internal class ManualViewModel : ViewModelBase
     {
         private readonly TribometerController _controller;
         private readonly TribometerSettings _settings;
@@ -43,12 +43,12 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
 
         private void Settings_SettingsChanged(object sender, EventArgs e)
         {
-            StepHCentre = _settings.stepPosHCentre ?? int.MaxValue;
-            StepHLeft = _settings.stepPosHLeft ?? int.MaxValue;
-            StepHRight = _settings.stepPosHRight ?? int.MaxValue;
-            StepVRaise = _settings.stepPosVRaised ?? int.MaxValue;
-            StepVUnloaded = _settings.stepPosVUnloaded ?? int.MaxValue;
-            StepVLoaded = _settings.stepPosVLoaded ?? int.MaxValue;
+            StepHCentre = _settings.stepPosHCentre?.ToString() ?? "-";
+            StepHLeft = _settings.stepPosHLeft?.ToString() ?? "-";
+            StepHRight = _settings.stepPosHRight?.ToString() ?? "-";
+            StepVRaise = _settings.stepPosVRaised?.ToString() ?? "-";
+            StepVUnloaded = _settings.stepPosVUnloaded?.ToString() ?? "-";
+            StepVLoaded = _settings.stepPosVLoaded?.ToString() ?? "-";
         }
 
         private void SetMark(string obj)
@@ -64,13 +64,13 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                 case "HRight":
                     _settings.stepPosHRight = _controller.PositionH;
                     break;
-                case "VRaise":
+                case "VRaised":
                     _settings.stepPosVRaised = _controller.PositionV;
                     break;
                 case "VUnloaded":
                     _settings.stepPosVUnloaded = _controller.PositionV;
                     break;
-                case "VLoad":
+                case "VLoaded":
                     _settings.stepPosVLoaded = _controller.PositionV;
                     break;
             }
@@ -144,6 +144,18 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
                     if (_settings.stepPosHCentre.HasValue)
                     {
                         _controller.MoveTo(TribometerAxis.Horizontal, _settings.stepPosHCentre.Value);
+                    }
+                    break;
+                case "HLeft":
+                    if (_settings.stepPosHLeft.HasValue)
+                    {
+                        _controller.MoveTo(TribometerAxis.Horizontal, _settings.stepPosHLeft.Value);
+                    }
+                    break;
+                case "HRight":
+                    if (_settings.stepPosHLeft.HasValue)
+                    {
+                        _controller.MoveTo(TribometerAxis.Horizontal, _settings.stepPosHRight.Value);
                     }
                     break;
                 case "VRaise":
@@ -281,43 +293,43 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             set { SetProperty(ref _useStepForGotoVertical, value); }
         }
 
-        private int _stepHCentre;
-        public int StepHCentre
+        private string _stepHCentre;
+        public string StepHCentre
         {
             get { return _stepHCentre; }
             set { SetProperty(ref _stepHCentre, value); }
         }
 
-        private int _stepHLeft;
-        public int StepHLeft
+        private string _stepHLeft;
+        public string StepHLeft
         {
             get { return _stepHLeft; }
             set { SetProperty(ref _stepHLeft, value); }
         }
 
-        private int _stepHRight;
-        public int StepHRight
+        private string _stepHRight;
+        public string StepHRight
         {
             get { return _stepHRight; }
             set { SetProperty(ref _stepHRight, value); }
         }
 
-        private int _stepVRaise;
-        public int StepVRaise
+        private string _stepVRaise;
+        public string StepVRaise
         {
             get { return _stepVRaise; }
             set { SetProperty(ref _stepVRaise, value); }
         }
 
-        private int _stepVUnloaded;
-        public int StepVUnloaded
+        private string _stepVUnloaded;
+        public string StepVUnloaded
         {
             get { return _stepVUnloaded; }
             set { SetProperty(ref _stepVUnloaded, value); }
         }
 
-        private int _stepVLoaded;
-        public int StepVLoaded
+        private string _stepVLoaded;
+        public string StepVLoaded
         {
             get { return _stepVLoaded; }
             set { SetProperty(ref _stepVLoaded, value); }

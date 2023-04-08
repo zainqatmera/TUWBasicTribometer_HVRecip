@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using TUWBasicTribometer_HVRecip.Controllers;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    public class SettingManualViewModel : BindableBase
+    public class SettingManualViewModel : ViewModelBase
     {
         TribometerController _controller;
         TribometerSettings _settings;   
@@ -19,6 +20,8 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
         {
             _controller = container.Resolve<TribometerController>();    
             _settings = container.Resolve<TribometerSettings>();
+
+            _controller.StateChanged += _controller_StateChanged;
 
             StepsNormalLargeH = _settings.moveStepsHNormalHigh;
             StepsNormalSmallH = _settings.moveStepsHNormalLow;
@@ -34,23 +37,29 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             AccelH = _settings.moveAccelH;
             AccelV = _settings.moveAccelV;
 
-            UpdateHorizontalSettingsCommand = new DelegateCommand(UpdateHorizontalSettings);
-            UpdateVerticalSettingsCommand = new DelegateCommand(UpdateVerticalSettings);
+            UpdateManualSettingsCommand = new DelegateCommand(UpdateManualSettings, CanUpdateManualSettings);
         }
 
-        private void UpdateHorizontalSettings()
+        private void _controller_StateChanged(object sender, OperatingState e)
         {
-            // TODO
+            UpdateManualSettingsCommand.RaiseCanExecuteChanged();
         }
 
-        private void UpdateVerticalSettings()
+        private bool CanUpdateManualSettings()
         {
-            // TODO
+            return _controller.State == OperatingState.ManualMove;
         }
 
-        public DelegateCommand UpdateHorizontalSettingsCommand { get; }
-        public DelegateCommand UpdateVerticalSettingsCommand { get; }
+        private void UpdateManualSettings()
+        {
+            if (_controller.State == OperatingState.ManualMove)
+            {
+                _controller.SetMotorControlParamsManual();
+            }
+        }
 
+
+        public DelegateCommand UpdateManualSettingsCommand { get; }
 
         public string Title { get; } = "Manual";
 

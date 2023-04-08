@@ -8,52 +8,108 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 {
     public enum MessageCode : byte
     {
-        StopMotion = 0,
-        Home = 1,
-        MoveRel = 2,    // Data[0] = Axis, Data[1...4] move steps
-        MoveTo = 3,     // Data[0] = Axis, Data[1...4] move to position
 
+        // ====== PC -> Tribometer MESSAGES =======
+
+        // Stop motion safely
+        StopMotion = 0,
+
+        // Run the homing process
+        Home = 1,
+
+        // Move relative to the current position
+        // 1 byte  : Axis
+        // 4 bytes : (long) Steps to move
+        MoveRel = 2,
+
+        // Move to the specified position
+        // 1 byte  : Axis
+        // 4 bytes : (long) position
+        MoveTo = 3,
+
+        // Request status information to be sent
         RequestStatus = 9,
 
+        // Start a vertical reciprocation test
+        // 4 bytes : (long) Unloaded position
+        // 4 bytes : (long) Loaded position
+        // 4 bytes : (long) Pause unloaded (ms)
+        // 4 bytes : (long) Pause loaded (ms)
+        // 4 bytes : (long) Number of cycles (-1 to continue indefinitely)
+        StartVerticalReciprocation = 10,
 
-        StartVerticalReciprocation = 10,        // Data[0...3] MinPosition (Unloaded), Data[4...7] MaxPosition (Loaded)
+        // Start a horizontal reciprocation test
+        // 4 bytes : (long) Left End position
+        // 4 bytes : (long) Right end position
+        // 4 bytes : (long) Pause at each end (ms)    
+        // 4 bytes : (long) Number of cycles (-1 to continue indefinitely)
+        // 1 byte  : NormalLoadingProfile
+        // 4 bytes : (long) Unloaded position 
+        // 4 bytes : (long) Loaded position 
+        StartHorizontalReciprocation = 11,
 
+        // End the current test (horizontal or vertical) at the end of the current cycle
         EndTest = 15,
 
+        // Set a motor contor parameter
+        // 1 byte  : Axis
+        // 1 byte  : ControlParameter
+        // x bytes : Value (4 bytes float for AccelStepper MaxSpeed and Accel)
         SetMotorControlParam = 20,   // Data[0] = Axis, Data[1] = MotorControlParam, Data[2..?] = value
 
+        // Set a test parameter 0 - use to update during a test
+        // 1 byte  : TestSettingsParameter
+        // x bytes : Value
+        SetTestSettingsParam = 21,
 
+
+        // Return to idle state from an error state
         ClearError = 99,    // Reset to idle from an error state;
-        EmergencyRaiseUp = 100,  // Raise the vertical axis to avoid force sensor overload, and stop h
+
+        // Perform an emergency raising of the vertical axis (to avoid force sensor overload) and stop H axis
+        EmergencyRaiseUp = 100,
+
+        // ====== Tribometer -> PC MESSAGES =======
 
         // OUTGOING
-        SetDatumPosition = 128,   // The position of the homed limit switch Data[0] = AXIS; Data[1..8] = long position
 
-        StatusOperatingState = 140,     // Send when the operating state is changed  data[0] = operating state
-        StatusPosition = 141,   // Data[0..3] = Horizontal position, Data[4..7] = Vertical position
+        // Provide the homed position for one axis (at limit switch contact)
+        // 1 byte  : Axis
+        // 4 bytes : (long) 
+        SetDatumPosition = 128,
+
+        // Notify of the operating state
+        // 1 byte  : OperatingState
+        StatusOperatingState = 140,
+
+        // Notify of the current position
+        // 4 bytes : (long) Horizontal position
+        // 4 bytes : (long) Vertical position
+        StatusPosition = 141,
+
+        // Notify of the motor control parmaters
+        // 1 byte  : Axis
+        // 1 byte  : MotorControlParam 
+        // ? bytes : Value  (4 bytes float for AccelStepper MaxSpeed and Accel)
         StatusMotorControlParam = 142,  // Data[0] = Axis, Data[1] = MotorControlParam, Data[2..?] = Value
 
-        CyclePointMark = 150,   // Mark a point in reciprocation cycle: data[0] = marker identifier
-        RecipEnd = 151,         // Reciprocating motion has ended
+        // Notify of reaching a point in a test cycle
+        // 1 byte  : identifier
+        CyclePointMark = 150,
 
-        ErrorAlarm = 199,       // An error state has been raised ; Data[0] = ErrorAlarmType
+        // Notify of end of test (number of cycles reached)
+        RecipEnd = 151,
+
+        // Notify of an error state
+        // 1 byte  : Error type
+        ErrorAlarm = 199,
+
+        // Send a log message
         TextLog = 200,
 
-        MessageResponse = 255   // Data[0] = MessageId of received message, Data[1] = Ack
-
-
-
-        /*        HorizontalMove = 0x10,              // Data: Int64 new postion
-                HorizontalSetDatum = 0x11,          // Data: -
-                HorizontalSetMaxSpeed = 0x12,       // Data: Float, steps per second
-                HorizontalSetAccel = 0x13,          // Data: Float, steps per second/second
-                HorizontalSetAmplitude = 0x14,      // Data: Int64, number of steps amplitude (half of stroke length)
-                HorizontalStart = 0x15,             // Data: Int, number of cycles
-                HorizontalStop = 0x16,
-                VerticalMove = 0x20,
-                VerticalSetDatum = 0x21,
-                VerticalSetMaxSpeed = 0x22,
-                VerticalSetAccel = 0x23
-        */
+        // Acknowledge receipt of an incoming message
+        // 1 byte  : MessageId of received message
+        // 1 byte  : Acknowledgment (ack)
+        MessageResponse = 255
     }
 }

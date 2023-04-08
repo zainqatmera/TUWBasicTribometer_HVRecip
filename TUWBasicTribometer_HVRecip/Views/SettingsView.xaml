@@ -14,7 +14,14 @@
     </UserControl.Resources>
     
     <Grid>
-        <TabControl prism:RegionManager.RegionName="SettingsTabControlRegion" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Settings" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="16"/>
+
+        <TabControl Grid.Row="1" prism:RegionManager.RegionName="SettingsTabControlRegion" />
 
     </Grid>
 </UserControl>

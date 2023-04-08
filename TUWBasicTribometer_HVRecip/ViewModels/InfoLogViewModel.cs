@@ -8,11 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using TUWBasicTribometer_HVRecip.Controllers;
 
 namespace TUWBasicTribometer_HVRecip.ViewModels
 {
-    internal class InfoLogViewModel : BindableBase, IDisposable
+    internal class InfoLogViewModel : ViewModelBase, IDisposable
     {
         private readonly TribometerController _controller;
 
@@ -35,7 +36,15 @@ namespace TUWBasicTribometer_HVRecip.ViewModels
             Application.Current.Dispatcher.Invoke(() =>
             {
                 IncomingMessages.Add(e);
+                SelectedLogMessage = e;
             });
+        }
+
+        private object _selectedLogMessage;
+        public object SelectedLogMessage
+        {
+            get { return _selectedLogMessage; }
+            set { SetProperty(ref _selectedLogMessage, value); }
         }
 
         public DelegateCommand ClearLogCommand { get; }

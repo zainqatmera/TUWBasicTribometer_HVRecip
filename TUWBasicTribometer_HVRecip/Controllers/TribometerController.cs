@@ -2,29 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace TUWBasicTribometer_HVRecip.Controllers
 {
     public class TribometerController
     {
         private SerialPortManager serialPortManager;
+        public TribometerSettings _settings { get; set; }
+
         private OperatingState _state;
         private int currentHPos;
         private int currentVPos;
 
         private int currentTestCycleCount = 0;
 
+        // Properties
+
         public int PositionH => currentHPos;
         public int PositionV => currentVPos;
-
-        public TribometerSettings Settings { get; set; }
-
-
-        public TribometerController()
-        {            
-        }
 
         public OperatingState State { 
             get => _state; 
@@ -44,6 +43,14 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         public event EventHandler<string> InfoLogIssued;
         public event EventHandler<int> TestCycleCountUpdated;
 
+
+        // Constructor
+
+        public TribometerController()
+        {
+        }
+
+
         // Methods - General connection and messaging
 
         public void Connect()
@@ -54,7 +61,7 @@ namespace TUWBasicTribometer_HVRecip.Controllers
                 serialPortManager.MessageReceived += SerialPortManager_MessageReceived;
                 serialPortManager.TextReceived += SerialPortManager_TextReceived;
 
-                serialPortManager.Connect(Settings.ComPortTribometer, Settings.ComPortTribometerBaudRate);
+                serialPortManager.Connect(_settings.ComPortTribometer, _settings.ComPortTribometerBaudRate);
             }
 
             serialPortManager.StartMessaging();
@@ -70,39 +77,6 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             serialPortManager?.SendCommand((byte)messageId, data);
         }
 
-        // Methods - Homing and setup
-
-        public void HomeTribometer()
-        {
-            SendCommand(MessageCode.Home);
-        }
-
-
-         // Methods - Manual move
-
-        public void MoveTo(TribometerAxis axis, int stepPosition)
-        {
-            SetMotorControlParamsManual();
-
-            byte[] buffer = new byte[5];
-            MemoryStream ms = new MemoryStream(buffer);
-            BinaryWriter bw = new BinaryWriter(ms);
-            bw.Write((byte)axis);
-            bw.Write(stepPosition);
-            SendCommand(MessageCode.MoveTo, buffer);
-        }
-
-        internal void Move(TribometerAxis axis, int moveSteps)
-        {
-            SetMotorControlParamsManual();
-
-            byte[] buffer = new byte[5];
-            MemoryStream ms = new MemoryStream(buffer);
-            BinaryWriter bw = new BinaryWriter(ms);
-            bw.Write((byte)axis);
-            bw.Write(moveSteps);
-            SendCommand(MessageCode.MoveRel, buffer);
-        }
 
 
 
@@ -142,12 +116,12 @@ namespace TUWBasicTribometer_HVRecip.Controllers
                             data = Encoding.UTF8.GetString(new ReadOnlySpan<byte>(e, 1, e.Length - 1).ToArray());
                         }
                         InfoLogIssued?.Invoke(this, $"{messageId} {data}");
-
                     }
                     break;
             }
-
         }
+
+        // Process Incoming Messages
 
         private void ProcessCyclePointMark(byte[] e)
         {
@@ -167,7 +141,6 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             MessageAck response = (MessageAck)br.ReadByte();
 
             InfoLogIssued?.Invoke(this, $"Message: {repliedMessageCode} {response}");
-
         }
 
         private void ProcessStatusPosition(byte[] e)
@@ -202,20 +175,57 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             InfoLogIssued?.Invoke(this, $"{axis} datum found at {pos}");
         }
 
+        // Outgoing Messages - Main control and set up
 
-        // Other outgoing commands
-
-        void SetMotorControlParamsManual()
+        public void HomeTribometer()
         {
-            SetMotorControlParams(Settings.moveMaxSpeedH, Settings.moveAccelH, Settings.moveMaxSpeedV, Settings.moveAccelV);
+            SendCommand(MessageCode.Home);
         }
+
+        public void Stop()
+        {
+            SendCommand(MessageCode.StopMotion);
+        }
+
+        public void EmergencyRaise()
+        {
+            SendCommand(MessageCode.EmergencyRaiseUp);
+        }
+
+        // Outgoing Messages - Manual move / Stop
+
+        public void MoveTo(TribometerAxis axis, int stepPosition)
+        {
+            SetMotorControlParamsManual();
+
+            byte[] buffer = new byte[5];
+            MemoryStream ms = new MemoryStream(buffer);
+            BinaryWriter bw = new BinaryWriter(ms);
+            bw.Write((byte)axis);
+            bw.Write(stepPosition);
+            SendCommand(MessageCode.MoveTo, buffer);
+        }
+
+        internal void Move(TribometerAxis axis, int moveSteps)
+        {
+            SetMotorControlParamsManual();
+
+            byte[] buffer = new byte[5];
+            MemoryStream ms = new MemoryStream(buffer);
+            BinaryWriter bw = new BinaryWriter(ms);
+            bw.Write((byte)axis);
+            bw.Write(moveSteps);
+            SendCommand(MessageCode.MoveRel, buffer);
+        }
+
+        // Outgoing Messages - settings
 
         public void SetMotorControlParams(float hSpeed, float hAccel, float vSpeed, float vAccel)
         {
             byte[] data = new byte[6];
             MemoryStream ms = new MemoryStream(data);
             BinaryWriter bw = new BinaryWriter(ms);
-            
+
             bw.Write((byte)TribometerAxis.Horizontal);
             bw.Write((byte)MotorControlParam.MaxSpeed);
             bw.Write(hSpeed);
@@ -242,19 +252,22 @@ namespace TUWBasicTribometer_HVRecip.Controllers
 
         }
 
-        internal void SetMotorControlParamsVertTest()
+        void SetMotorControlParamsManual()
         {
-            SetMotorControlParams(Settings.vertTestMaxSpeedH, Settings.vertTestAccelH, Settings.vertTestMaxSpeedV, Settings.vertTestAccelV);
-        }
-        internal void Stop()
-        {
-            SendCommand(MessageCode.StopMotion);
+            SetMotorControlParams(_settings.moveMaxSpeedH, _settings.moveAccelH, _settings.moveMaxSpeedV, _settings.moveAccelV);
         }
 
-        internal void EmergencyRaise()
+        internal void SetMotorControlParamsVertTest()
         {
-            SendCommand(MessageCode.EmergencyRaiseUp);
+            SetMotorControlParams(_settings.vertTestMaxSpeedH, _settings.vertTestAccelH, _settings.vertTestMaxSpeedV, _settings.vertTestAccelV);
         }
+
+        internal void SetMotorControlParamsHorizTest()
+        {
+            SetMotorControlParams(_settings.horizTestMaxSpeedH, _settings.horizTestAccelH, _settings.horizTestMaxSpeedV, _settings.horizTestAccelV);
+        }
+
+        // Outgoing messages - tests
 
         internal void StartVertRecipTest()
         {
@@ -264,14 +277,40 @@ namespace TUWBasicTribometer_HVRecip.Controllers
             byte[] buffer = new byte[20];
             MemoryStream ms = new MemoryStream(buffer);
             BinaryWriter bw = new BinaryWriter(ms);
-            bw.Write(Settings.stepPosVUnloaded.Value);
-            bw.Write(Settings.stepPosVLoaded.Value);
-            bw.Write(Settings.vertTestPauseTimeUnloaded);
-            bw.Write(Settings.vertTestPauseTimeLoaded);
-            bw.Write(Settings.vertTestNumberOfCycles);
+            bw.Write(_settings.stepPosVUnloaded.Value);
+            bw.Write(_settings.stepPosVLoaded.Value);
+            bw.Write(_settings.vertTestPauseTimeUnloaded);
+            bw.Write(_settings.vertTestPauseTimeLoaded);
+            bw.Write(_settings.vertTestStopAtNumberOfCycles ? _settings.vertTestTargetNumberOfCycles : -1);
 
             SetMotorControlParamsVertTest();
             SendCommand(MessageCode.StartVerticalReciprocation, buffer);
+        }
+
+        internal void StartHorizRecipTest()
+        {
+            currentTestCycleCount = 0;
+            TestCycleCountUpdated?.Invoke(this, currentTestCycleCount);
+
+            byte[] buffer = new byte[20];
+            MemoryStream ms = new MemoryStream(buffer);
+            BinaryWriter bw = new BinaryWriter(ms);
+            bw.Write(_settings.stepPosHLeft.Value);
+            bw.Write(_settings.stepPosHRight.Value);
+            bw.Write(_settings.horizTestPauseTime);
+            bw.Write(_settings.vertTestStopAtNumberOfCycles ? _settings.horizTestTargetNumberOfCycles : -1);
+            bw.Write((byte)_settings.horizTestNormalLoadingProfile);
+            bw.Write(_settings.stepPosVUnloaded.Value);
+            bw.Write(_settings.stepPosVLoaded.Value);
+
+            SetMotorControlParamsHorizTest();
+            SendCommand(MessageCode.StartHorizontalReciprocation, buffer);
+
+        }
+
+        internal void EndTest()
+        {
+            SendCommand(MessageCode.EndTest);
         }
     }
 }

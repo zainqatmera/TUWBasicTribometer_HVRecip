@@ -47,4 +47,21 @@ namespace TUWBasicTribometer_HVRecip.Controllers
         MaxSpeed,
         Accel
     };
+
+    public enum TestSettingsParameter : byte
+    {
+        PauseTimeUnloaded,
+        PauseTimeLoaded,
+        PauseTimeHorizontalEnd
+    }
+
+    public enum NormalLoadingProfile : byte
+    {
+        [Description("Manual Control")]
+        ManualControl,
+
+        [Description("Load Before Start")]
+        LoadBeforeStart
+    };
+
 }
